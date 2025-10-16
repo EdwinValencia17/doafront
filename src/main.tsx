@@ -1,7 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { PrimeReactProvider } from "primereact/api";
-import App from './App'
+import App from './pages/App'
+import { RouterProvider } from 'react-router-dom';
+import router from './routes/router';
 
 import 'primereact/resources/themes/lara-light-indigo/theme.css'; //theme
 import 'primereact/resources/primereact.min.css'; //core css
@@ -11,7 +13,7 @@ import 'primeflex/primeflex.css'; // flex
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <PrimeReactProvider>
-       <App />
+       <RouterProvider router={router} />
     </PrimeReactProvider>
   </React.StrictMode>
 )
