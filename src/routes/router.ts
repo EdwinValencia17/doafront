@@ -5,7 +5,13 @@ import Uno from "../pages/Uno";
 const router = createBrowserRouter([
     {
         path:'/',
-        Component:App
+        Component:App,
+        children:[
+            {
+                path:'/uno',
+                Component:Uno
+            }
+        ]
     }
 ])
 

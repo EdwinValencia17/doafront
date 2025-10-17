@@ -1,11 +1,35 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>doafront</title>
+    <title>DOA Clarios</title>
+    
+    <!-- Favicon tags - RUTAS CORREGIDAS PARA VITE -->
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+    
   </head>
+  <!-- === Curva del header (recorte con curvas) === -->
+<!-- === Curva del header (recorte con curvas) === -->
+<svg width="0" height="0" xmlns="http://www.w3.org/2000/svg" style="position:absolute">
+  <defs>
+    <!-- Máscara en unidades normalizadas 0..1 -->
+    <mask id="dashHeaderMask" maskUnits="objectBoundingBox" x="0" y="0" width="1" height="1">
+      <!-- Fondo negro (recorta todo) -->
+      <rect x="0" y="0" width="1" height="1" fill="black"/>
+      <!-- Zona visible blanca con las curvas (idéntica a tu Q) -->
+      <!-- 0.07 = 7% del corte; cambia 0.07/0.93 para variar profundidad -->
+      <path d="M0,0 H1 V1 L0.93,1 Q1,1,1,0.93 V0 H0 V0.93 Q0,1,0.07,1 Z" fill="white"/>
+    </mask>
+  </defs>
+</svg>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
