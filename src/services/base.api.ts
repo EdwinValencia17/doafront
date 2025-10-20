@@ -1,10 +1,10 @@
-// src/services/http.ts
-import axios, {
+
+/*import axios, {
   AxiosHeaders,
   InternalAxiosRequestConfig,
   isAxiosError,
 } from "axios";
-import { useAuthStore } from "../store/StoreAuth";
+import { useAuthStore } from "@/context/StoreAuth";
 
 const ENV_BASE = import.meta.env.VITE_API_URL as string | undefined;
 
@@ -78,3 +78,4 @@ http.interceptors.response.use(
     return Promise.reject(err);
   }
 );
+*/

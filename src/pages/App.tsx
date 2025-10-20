@@ -1,13 +1,10 @@
-import React from 'react'
-import { Outlet } from 'react-router-dom'
-const App = () => {
-  return (
-    <div>
-      <h1>Navbar</h1>
-      <h1>sidebar</h1>
-      <Outlet />
-    </div>
-  )
-}
+import { Outlet } from "react-router-dom";
+import AppShell from "../components/layout/AppShell"; // el que te pasé con el sidebar
 
-export default App
+export default function App() {
+  return (
+    <AppShell>
+      <Outlet />
+    </AppShell>
+  );
+}

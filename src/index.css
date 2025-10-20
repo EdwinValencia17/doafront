@@ -1,0 +1,12 @@
+/* src/index.css */
+
+/* Dile a Tailwind dónde escanear clases (v4 usa @source en el CSS) */
+@source "./index.html";
+@source "./src/**/*.{ts,tsx,js,jsx}";
+
+/* Importa SOLO components + utilities (sin base => sin preflight) */
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* Utilidades propias opcionales */
+.card { @apply bg-white rounded-[22px] border border-black/5 shadow-[0_16px_36px_rgba(0,0,0,.18)] overflow-hidden; }

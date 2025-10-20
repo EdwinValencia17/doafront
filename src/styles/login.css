@@ -1,0 +1,1072 @@
+/* =========================
+   VARIABLES GLOBALES
+   ========================= */
+:root{
+  /* Tipografía y color */
+  --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial;
+  --ink: #111827;
+  --muted:#6b7280;
+
+  /* Marca */
+  --brand:#7C3AED;            /* violeta */
+  --brand-2:#B43DE3;          /* fucsia violeta */
+
+  /* Layout */
+  --radius: 22px;
+  --shadow: 0 18px 40px rgba(0,0,0,.22);
+
+  /* App (fondo claro) */
+  --app-bg-a: #f7f8fb;        /* arriba */
+  --app-bg-b: #eef2f7;        /* abajo */
+  --app-vg:  rgba(124,58,237,.06);
+
+  /* Topbar violeta “glass” */
+  --tb-dark-a: rgba(16,12,32,.72);
+  --tb-dark-b: rgba(24,16,46,.64);
+  --tb-violet: rgba(124,58,237,.28);
+  --tb-border: rgba(255,255,255,.28);
+  --tb-ink: #fff;
+
+  /* Form */
+  --glass-bg: rgba(255,255,255,.22);
+  --glass-border: rgba(255,255,255,.50);
+  --glass-ring: rgba(180,61,227,.22);
+  --input-icon: #6d28d9;
+  --placeholder-ink: rgba(17,24,39,.72);
+
+  /* Medidas reutilizables */
+  --panel-w: 420px;   /* ancho panel login derecho */
+  --field-h: 46px;
+  --field-r: 12px;
+  --pad-l: 2.3rem;
+  --pad-r-eye: 2.4rem;
+
+  /* Logo en login (puedes ajustar) */
+  --logo-w-lg: 450px;
+  --logo-h-lg: 150px;
+  --logo-lift-lg: 58px;
+  --logo-shift-lg: 28px;
+
+  --logo-w-sm: 300px;
+  --logo-h-sm: 110px;
+  --logo-lift-sm: 16px;
+  --logo-shift-sm: 10px;
+}
+
+/* Utilidad */
+@keyframes shine{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+
+/* =========================
+   BASE
+   ========================= */
+html, body, #root{ height:100% }
+body{
+  margin:0;
+  font-family:var(--font);
+  color:var(--ink);
+  background: var(--app-bg-a); /* base lisa (la app añade gradiente) */
+}
+
+/* =========================
+   APP (post-login)
+   ========================= */
+.app-shell{
+  min-height:100vh;
+  display:grid;
+  grid-template-rows:auto 1fr;
+  /* fondo claro con toques violeta */
+  background:
+    radial-gradient(120% 160% at 12% 0%, var(--app-vg), transparent 55%),
+    radial-gradient(120% 160% at 88% 100%, var(--app-vg), transparent 55%),
+    linear-gradient(180deg, var(--app-bg-a) 0%, var(--app-bg-b) 100%) !important;
+  background-attachment: fixed;
+}
+.app-content{ padding:16px }
+
+/* ===== TOPBAR violeta “glass” =====
+   Usa ::before para asegurar el color y el blur.
+   Añade la clase .topbar--violet a tu header si quieres fijarlo explícitamente.
+*/
+.app-shell > header.topbar,
+header.topbar.topbar--violet{
+  position:sticky; top:0; z-index:60;
+  height:64px;
+  display:flex; align-items:center; gap:14px;
+  padding:0 16px;
+  color:var(--tb-ink) !important;
+  border-bottom:1px solid var(--tb-border);
+  box-shadow:0 10px 30px rgba(0,0,0,.22);
+  isolation:isolate;                 /* crea stacking context */
+}
+.app-shell > header.topbar::before,
+header.topbar.topbar--violet::before{
+  content:"";
+  position:absolute; inset:0; z-index:-1;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.10)),
+    linear-gradient(140deg, var(--tb-dark-a) 0%, var(--tb-dark-b) 60%),
+    linear-gradient(180deg, var(--tb-violet) 0%, transparent 65%);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border-bottom:1px solid var(--tb-border);
+  box-shadow:0 10px 30px rgba(0,0,0,.22);
+}
+.app-shell > header.topbar::after{
+  content:"";
+  position:absolute; left:0; right:0; bottom:-1px; height:1px;
+  background:linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.52), rgba(255,255,255,0));
+  opacity:.32; pointer-events:none;
+}
+
+/* Botón hamburguesa / icon buttons en topbar */
+.topbar .icon-btn{
+  height:40px; width:40px; border:0; border-radius:12px;
+  background: rgba(255,255,255,.16);
+  color: var(--tb-ink);
+  display:grid; place-items:center; cursor:pointer;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.25);
+}
+.topbar .icon-btn:hover{ background: rgba(255,255,255,.22) }
+.sb-logo{ display:flex; align-items:center; gap:10px }
+.sb-logo img{
+  height:28px; width:auto; display:block;
+  filter: drop-shadow(0 1px 0 rgba(255,255,255,.32))
+          drop-shadow(0 10px 22px rgba(0,0,0,.32))
+          contrast(1.05) saturate(1.05);
+}
+
+/* ===== Sidebar glass ===== */
+:root{
+  --sb-w: 280px;
+  --sb-halo: rgba(124,58,237,.25);
+  --sb-border: rgba(255,255,255,.28);
+  --sb-ink:#1f2937;
+  --sb-ink-muted:#6b7280;
+  --sb-hover: rgba(124,58,237,.12);
+  --sb-ring:  rgba(124,58,237,.28);
+}
+.p-sidebar.sb-panel{ width: var(--sb-w) !important; }
+.sb-wrapper{
+  height:100%;
+  display:flex; flex-direction:column;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.20), rgba(255,255,255,.12)),
+    radial-gradient(120% 160% at 0% 0%, var(--sb-halo), transparent 60%);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border-right:1px solid var(--sb-border);
+}
+.sb-header{ padding:14px 16px; display:flex; align-items:center; justify-content:space-between }
+.sb-section-title, .sb-header, .sb-header *{ color:var(--sb-ink); font-weight:700; letter-spacing:.02em }
+.sb-scroll{ overflow:auto; padding-bottom:8px }
+.sb-item,
+.sb-item .p-menuitem-link{
+  display:flex; align-items:center; gap:.5rem;
+  width:100%; padding:.70rem .75rem; margin:.125rem .375rem;
+  border-radius:12px; text-decoration:none; color:var(--sb-ink) !important; cursor:pointer;
+}
+.sb-item .pi{ color:#6d28d9 !important }
+.sb-item:hover,
+.sb-item .p-menuitem-link:hover{
+  background:var(--sb-hover) !important;
+  box-shadow:0 0 0 1px var(--sb-ring) inset;
+}
+.sb-item.is-active,
+.sb-item .p-menuitem-link.p-menuitem-link-active{
+  background:rgba(124,58,237,.18) !important;
+  box-shadow:0 0 0 1px rgba(124,58,237,.36) inset;
+}
+.sb-badge{
+  min-width:1.25rem; height:1.25rem; margin-left:auto;
+  display:inline-flex; align-items:center; justify-content:center;
+  border-radius:999px; padding:0 .35rem; background:#6366f1; color:#fff; font-size:.75rem; font-weight:700;
+}
+
+/* =========================
+   LOGIN (pantalla de acceso)
+   ========================= */
+
+/* Shell con imagen + overlay morado oscuro */
+.login-shell{
+  min-height:100svh;
+  display:grid; place-items:center;
+  padding:clamp(12px,3vh,28px);
+  position:relative; isolation:isolate;
+  background:
+    radial-gradient(100% 120% at 10% 0%, rgba(124,58,237,.20), transparent 60%),
+    radial-gradient(100% 120% at 90% 100%, rgba(180,61,227,.20), transparent 60%),
+    url('/src/assets/maxresdefault.jpg') center/cover no-repeat fixed;
+}
+.login-shell::before{
+  content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(120% 160% at 12% 8%, rgba(147,51,234,.35), transparent 55%),
+    linear-gradient(120deg, rgba(49,10,101,.62) 0%, rgba(88,28,135,.58) 40%, rgba(124,58,237,.50) 80%),
+    rgba(12,6,24,.22);
+}
+.login-card{
+  position:relative; z-index:1;
+  width:min(100%, 980px);
+  display:grid; grid-template-columns: 1fr minmax(320px, var(--panel-w));
+  gap:0; padding:0; overflow:hidden;
+  border-radius:var(--radius);
+  background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.10));
+  border:1px solid rgba(255,255,255,.28);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow: 0 18px 40px rgba(0,0,0,.22);
+}
+@media (max-width:920px){
+  .login-card{ grid-template-columns:1fr }
+}
+
+/* Columna izquierda (hero) */
+.login-hero{
+  border-radius: var(--radius) 0 0 var(--radius);
+  padding: clamp(18px,3vw,28px);
+  color:#fff; position:relative;
+  background:
+    radial-gradient(120% 160% at -10% -20%, rgba(255,255,255,.32), transparent 42%),
+    linear-gradient(135deg,
+      rgba(99,102,241,.22) 0%,
+      rgba(124,58,237,.20) 45%,
+      rgba(180,61,227,.18) 100%);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  border-right:1px solid rgba(255,255,255,.28);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.45);
+}
+.logo-mask{
+  background: url('src/assets/787eaa1c-4ac6-4648-9c86-3b4a7d6f45db-removebg-preview.png')
+              no-repeat left center / contain !important;
+  width: var(--logo-w-lg); height: var(--logo-h-lg);
+  position:relative; top: calc(-1 * var(--logo-lift-lg)); left: calc(-1 * var(--logo-shift-lg));
+  margin-bottom:10px;
+  filter: drop-shadow(0 1px 0 rgba(255,255,255,.55))
+          drop-shadow(0 14px 28px rgba(0,0,0,.28));
+}
+.hero-title{ font-size: clamp(28px,4.6vw,44px); line-height:1.1; margin: 8px 0 4px; font-weight:800; color:#fff; text-shadow:0 1px 0 rgba(0,0,0,.06) }
+.hero-copy{ opacity:.96; max-width:44ch }
+.btn-ghost{
+  margin-top:18px; appearance:none; border-radius:12px; padding:10px 14px;
+  border:1px solid rgba(255,255,255,.75); background:transparent; color:#fff; font-weight:700;
+  display:inline-flex; align-items:center; gap:8px; cursor:pointer;
+}
+.btn-ghost:hover{ background:rgba(255,255,255,.14) }
+
+/* Columna derecha (panel/form) */
+.login-panel{
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: clamp(18px,2.2vw,26px);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.86), rgba(255,255,255,.76)),
+    radial-gradient(120% 180% at 100% 0%, rgba(124,58,237,.06), transparent 60%);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-left: 1px solid rgba(255,255,255,.55);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.65), 0 18px 36px rgba(0,0,0,.18);
+}
+.panel-header{ margin-bottom:10px }
+.panel-title{ margin:0; font-size:28px; font-weight:800; color:#1f2937 }
+.panel-subtitle{ margin:4px 0 0; color:var(--muted) }
+.panel-footer{ margin-top:14px; text-align:center; color:var(--brand); font-weight:600 }
+
+.login-form{ width:100%; max-width:380px; display:flex; flex-direction:column; gap:8px }
+
+/* Inputs “glass” (PrimeReact compat) */
+.p-input-icon-left, .p-input-icon-right{ position:relative }
+.p-input-icon-left > i,
+.p-input-icon-left > span.pi,
+.p-input-icon-left > svg{
+  position:absolute; top:50%; left:12px; transform:translateY(-50%);
+  color:var(--input-icon) !important; opacity:.95 !important; pointer-events:none;
+}
+.p-inputtext.glass-input,
+.p-password .p-inputtext.glass-input,
+.p-password-input.glass-input{
+  box-sizing:border-box; width:100% !important;
+  height: var(--field-h) !important; line-height: calc(var(--field-h) - 2px) !important;
+  border-radius: var(--field-r) !important;
+  padding-left: var(--pad-l) !important; padding-right: 1rem !important;
+  background: var(--glass-bg) !important; border:1px solid var(--glass-border) !important;
+  backdrop-filter: blur(12px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+  color:#111827 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.65), 0 6px 18px rgba(124,58,237,.12) !important;
+}
+.p-inputtext.glass-input::placeholder,
+.p-password .p-inputtext.glass-input::placeholder,
+.p-password-input.glass-input::placeholder{ color: var(--placeholder-ink) !important; opacity:1 !important }
+.p-inputtext.glass-input:enabled:focus,
+.p-password .p-inputtext.glass-input:enabled:focus{
+  outline:none;
+  border-color: rgba(180,61,227,.65) !important;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.65), 0 0 0 7px var(--glass-ring);
+}
+.p-password .p-password-icon{
+  position:absolute !important; top:50% !important; right:10px !important; transform:translateY(-50%) !important;
+  width:1.5rem; height:1.5rem; display:flex; align-items:center; justify-content:center;
+  color: var(--input-icon) !important;
+}
+.p-password .p-password-icon:hover{ filter:brightness(1.05) }
+
+/* Checkbox estilo CTA */
+:root{ --cta-a:#7C3AED; --cta-b:#B43DE3; }
+.p-checkbox .p-checkbox-box{ width:20px; height:20px; border-radius:10px !important }
+.p-checkbox .p-checkbox-box.p-highlight{
+  background-image: linear-gradient(135deg, var(--cta-a), var(--cta-b)) !important;
+  background-color: transparent !important; border-color: transparent !important;
+  box-shadow: 0 6px 14px rgba(124,58,237,.20), inset 0 1px 0 rgba(255,255,255,.35) !important;
+}
+.p-checkbox .p-checkbox-icon{ color:#fff !important }
+.p-checkbox.p-focus .p-checkbox-box{
+  box-shadow: 0 0 0 4px rgba(124,58,237,.22) !important; border-color: var(--cta-a) !important;
+}
+
+/* Botón principal */
+.p-button.w-full,
+.btn-primary{
+  width:100%; height:46px; border-radius:12px; border:0; cursor:pointer;
+  background: linear-gradient(135deg, var(--cta-a), var(--cta-b));
+  color:#fff; font-weight:800; letter-spacing:.2px;
+  box-shadow: 0 10px 24px rgba(124,58,237,.22), inset 0 1px 0 rgba(255,255,255,.35);
+}
+.p-button.w-full:enabled:hover,
+.btn-primary:hover{ filter:brightness(1.03) }
+
+/* Responsive login: apilado */
+@media (max-width:920px){
+  .login-hero{ border-radius: var(--radius) var(--radius) 0 0 }
+  .login-panel{ border-radius: 0 0 var(--radius) var(--radius); border-left:0; border-top:1px solid rgba(17,24,39,.06) }
+  .logo-mask{ width: var(--logo-w-sm); height: var(--logo-h-sm); top: calc(-1 * var(--logo-lift-sm)); left: calc(-1 * var(--logo-shift-sm)) }
+}
+/* =========================
+   VARIABLES GLOBALES
+   ========================= */
+:root{
+  --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial;
+  --ink: #2d2a4a;
+  --muted:#6b7280;
+
+  /* Marca */
+  --brand:#7C3AED;
+  --brand-2:#B43DE3;
+
+  /* UI */
+  --radius:22px;
+  --shadow:0 18px 40px rgba(0,0,0,.14);
+
+  /* Inputs glass */
+  --glass-bg: rgba(255,255,255,.72);
+  --glass-border: rgba(124,58,237,.22);
+  --glass-ring: rgba(180,61,227,.18);
+  --input-icon:#6d28d9;
+}
+
+/* =========================
+   BASE GLOBAL
+   ========================= */
+html,body,#root{height:100%}
+body,
+.app-shell{
+  margin:0;
+  font-family:var(--font);
+  color:var(--ink);
+  background:#ffffff !important;     /* fondo global blanco */
+}
+
+/* =========================
+   TOPBAR (lavanda un poco más oscura)
+   ========================= */
+/* Contenedor del topbar */
+.app-shell > header.topbar,
+header.topbar,
+header.topbar.topbar--violet{
+  position:sticky; top:0; z-index:60;
+  height:64px;
+  display:flex; align-items:center; gap:14px;
+  padding:0 16px;
+  border-bottom:1px solid rgba(124,58,237,.25);
+  box-shadow:0 8px 22px rgba(124,58,237,.12);
+  color:var(--ink) !important;
+  isolation:isolate;                 /* para que ::before no afecte hijos */
+}
+
+/* Fondo + blur SOLO en el pseudo-elemento (contenido queda limpio) */
+.app-shell > header.topbar::before,
+header.topbar::before{
+  content:"";
+  position:absolute; inset:0; z-index:-1;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.50), rgba(255,255,255,.34)),
+    /* lavanda un poco más oscura que antes */
+    linear-gradient(140deg, #dbd3ff 0%, #c6b6ff 58%, #b79fff 100%);
+  backdrop-filter: blur(12px) saturate(145%);
+  -webkit-backdrop-filter: blur(12px) saturate(145%);
+}
+
+/* Hairline sutil bajo el topbar */
+.app-shell > header.topbar::after,
+header.topbar::after{
+  content:"";
+  position:absolute; left:0; right:0; bottom:-1px; height:1px;
+  background:linear-gradient(90deg, rgba(255,255,255,0), rgba(124,58,237,.45), rgba(255,255,255,0));
+  opacity:.45; pointer-events:none;
+}
+
+/* Botón hamburguesa / icon buttons */
+.topbar .icon-btn{
+  height:40px; width:40px; border:0; border-radius:12px;
+  background: rgba(124,58,237,.14);
+  color: var(--ink);
+  display:grid; place-items:center; cursor:pointer;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.55);
+}
+.topbar .icon-btn:hover{ background: rgba(124,58,237,.22); }
+
+/* ===== Logo en el topbar: NUNCA hereda el glass ===== */
+.topbar .sb-logo{ display:flex; align-items:center; gap:10px; }
+.topbar .sb-logo img{
+  position:relative; z-index:1;      /* por encima del ::before */
+  mix-blend-mode: normal !important; /* evita mezclas con el fondo */
+  filter:
+    drop-shadow(0 1px 0 rgba(255,255,255,.65))
+    drop-shadow(0 10px 22px rgba(0,0,0,.18))
+    contrast(1.05) saturate(1.05);
+  height:28px; width:auto; display:block;
+}
+
+/* =========================
+   CONTENIDO / TARJETAS
+   ========================= */
+.app-content{ padding:16px; }
+
+.card{
+  background:#fff;
+  border-radius:var(--radius);
+  border:1px solid rgba(17,24,39,.06);
+  box-shadow:var(--shadow);
+  padding:1rem;
+}
+
+/* =========================
+   BOTONES PRINCIPALES
+   ========================= */
+.p-button.w-full,
+.btn-primary{
+  width:100%; height:46px; border:0; border-radius:12px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  color:#fff; font-weight:800; letter-spacing:.2px; cursor:pointer;
+  box-shadow: 0 10px 22px rgba(124,58,237,.20),
+              inset 0 1px 0 rgba(255,255,255,.35);
+}
+.p-button.w-full:enabled:hover,
+.btn-primary:hover{ filter: brightness(1.03); }
+
+/* =========================
+   INPUTS “GLASS”
+   ========================= */
+.p-input-icon-left, .p-input-icon-right{ position:relative !important; }
+.p-input-icon-left > i,
+.p-input-icon-left > span.pi,
+.p-input-icon-left > svg{
+  position:absolute !important; top:50% !important; left:12px !important;
+  transform:translateY(-50%) !important;
+  color: var(--input-icon) !important;
+}
+
+.p-inputtext.glass-input,
+.p-password .p-inputtext.glass-input{
+  height:46px; width:100%;
+  padding-left:2.3rem; padding-right:1rem;
+  border-radius:12px;
+  background: var(--glass-bg) !important;
+  border:1px solid var(--glass-border) !important;
+  color: var(--ink) !important;
+  backdrop-filter: blur(10px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(140%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.65),
+    0 6px 16px rgba(124,58,237,.10) !important;
+}
+.p-inputtext.glass-input::placeholder{ color: rgba(45,42,74,.62) !important; }
+.p-inputtext.glass-input:enabled:focus,
+.p-password .p-inputtext.glass-input:enabled:focus{
+  outline:0;
+  border-color: rgba(180,61,227,.55) !important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.65),
+    0 0 0 7px var(--glass-ring) !important;
+}
+
+/* Ícono del ojo */
+.p-password .p-password-icon{
+  position:absolute !important; top:50% !important; right:10px !important;
+  transform:translateY(-50%) !important;
+  width:1.5rem; height:1.5rem; display:flex; align-items:center; justify-content:center;
+  color: var(--input-icon) !important;
+}
+.p-password .p-password-icon:hover{ filter:brightness(1.05); }
+/* ===== LOGIN — RESTORE (pegar al FINAL) ===== */
+:root{
+  --field-h:46px;
+  --field-r:12px;
+  --pad-l:2.3rem;
+  --pad-r-eye:2.4rem;
+  --cta-a:#7C3AED; --cta-b:#B43DE3;
+  --input-icon:#6d28d9;
+  --placeholder-ink: rgba(17,24,39,.72);
+}
+
+/* Form scope */
+.login-form{ width:100%; max-width:380px; display:flex; flex-direction:column; gap:8px }
+
+/* 1) Iconos alineados al centro (InputText/Password) */
+.p-input-icon-left, .p-input-icon-right{ position:relative !important; }
+.p-input-icon-left > i,
+.p-input-icon-left > span.pi,
+.p-input-icon-left > svg{
+  position:absolute !important;
+  top:50% !important; left:12px !important;
+  transform:translateY(-50%) !important;
+  line-height:1 !important; margin:0 !important;
+  color:var(--input-icon) !important; opacity:.95 !important;
+  pointer-events:none;
+}
+
+/* 2) Inputs MISMO tamaño + vidrio */
+.login-panel .p-inputtext,
+.login-panel .p-password .p-inputtext{
+  box-sizing:border-box !important;
+  width:100% !important;
+  height:var(--field-h) !important;
+  line-height:calc(var(--field-h) - 2px) !important;
+  border-radius:var(--field-r) !important;
+
+  padding-left:var(--pad-l) !important;
+  padding-right:1rem !important;
+
+  background:rgba(255,255,255,.72) !important;
+  border:1px solid rgba(124,58,237,.22) !important;
+  color:#111827 !important;
+  backdrop-filter:blur(10px) saturate(140%) !important;
+  -webkit-backdrop-filter:blur(10px) saturate(140%) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.65),
+             0 6px 16px rgba(124,58,237,.10) !important;
+}
+.login-panel .p-inputtext::placeholder{ color:var(--placeholder-ink) !important; }
+
+.login-panel .p-inputtext:enabled:focus,
+.login-panel .p-password .p-inputtext:enabled:focus{
+  outline:0 !important;
+  border-color:rgba(180,61,227,.55) !important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.65),
+             0 0 0 7px rgba(180,61,227,.18) !important;
+}
+
+/* 3) Ojo del password centrado + padding extra a la derecha */
+.login-panel .p-password .p-password-icon{
+  position:absolute !important;
+  top:50% !important; right:10px !important;
+  transform:translateY(-50%) !important;
+  width:1.5rem; height:1.5rem;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--input-icon) !important;
+}
+.login-panel .p-password .p-inputtext{ padding-right:var(--pad-r-eye) !important; }
+
+/* 4) Checkbox morado como el CTA */
+.login-panel .p-checkbox .p-checkbox-box{
+  width:20px; height:20px; border-radius:10px !important;
+}
+.login-panel .p-checkbox .p-checkbox-box.p-highlight{
+  background-image:linear-gradient(135deg,var(--cta-a),var(--cta-b)) !important;
+  background-color:transparent !important; border-color:transparent !important;
+  box-shadow:0 6px 14px rgba(124,58,237,.20),
+             inset 0 1px 0 rgba(255,255,255,.35) !important;
+}
+.login-panel .p-checkbox .p-checkbox-icon{ color:#fff !important; }
+.login-panel .p-checkbox.p-focus .p-checkbox-box{
+  box-shadow:0 0 0 4px rgba(124,58,237,.22) !important;
+  border-color:var(--cta-a) !important;
+}
+
+/* 5) Botón “Ingresar” */
+.login-panel .p-button.w-full,
+.login-panel .btn-primary{
+  width:100% !important; height:46px !important;
+  border:0 !important; border-radius:12px !important;
+  background:linear-gradient(135deg,var(--cta-a),var(--cta-b)) !important;
+  color:#fff !important; font-weight:800 !important; letter-spacing:.2px;
+  box-shadow:0 10px 24px rgba(124,58,237,.22),
+             inset 0 1px 0 rgba(255,255,255,.35) !important;
+}
+.login-panel .p-button.w-full:enabled:hover,
+.login-panel .btn-primary:hover{ filter:brightness(1.03); }
+
+/* 6) Fila “Recordarme” alineada */
+.login-panel .remember,
+.login-panel .p-field-checkbox{ display:flex; align-items:center; gap:.5rem; }
+/* === LOGIN: íconos centrados y con el mismo punch del sidebar === */
+
+/* wrapper correcto para que el centrado funcione siempre */
+.login-panel .p-input-icon-left,
+.login-panel .p-input-icon-right{
+  position: relative !important;
+  display: block;              /* evita saltos raros */
+}
+
+/* Ícono IZQUIERDO (usuario/candado) — centrado y notorio */
+.login-panel .p-input-icon-left > i,
+.login-panel .p-input-icon-left > span.pi,
+.login-panel .p-input-icon-left > svg{
+  position: absolute !important;
+  top: 50% !important; left: 12px !important;
+  transform: translateY(-50%) !important;
+  margin: 0 !important; line-height: 1 !important;
+  font-size: 1.05rem !important;            /* un pelín más grande */
+  color: #6d28d9 !important;                /* mismo morado del sidebar */
+  opacity: 1 !important;
+  pointer-events: none;
+
+  /* darle presencia como en el sidebar */
+  text-shadow: 0 1px 0 rgba(255,255,255,.65);
+  filter: drop-shadow(0 6px 12px rgba(124,58,237,.16));
+  z-index: 1;
+}
+
+/* Asegura el padding para que no choquen con el ícono */
+.login-panel .p-input-icon-left .p-inputtext,
+.login-panel .p-input-icon-left .p-password-input,
+.login-panel .p-input-icon-left .p-password .p-inputtext{
+  padding-left: var(--pad-l) !important;
+}
+
+/* Ícono del OJO — centrado, visible y con el mismo color */
+.login-panel .p-password .p-password-icon{
+  position: absolute !important;
+  top: 50% !important; right: 10px !important;
+  transform: translateY(-50%) !important;
+  width: 1.5rem; height: 1.5rem;
+  display: flex; align-items: center; justify-content: center;
+  color: #6d28d9 !important;               /* morado sidebar */
+  opacity: 1 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.65);
+  filter: drop-shadow(0 6px 12px rgba(124,58,237,.16));
+}
+.login-panel .p-password .p-inputtext{ padding-right: var(--pad-r-eye) !important; }
+
+/* Altura única (por si algo del tema mueve la línea base) */
+.login-panel .p-inputtext,
+.login-panel .p-password .p-inputtext{
+  height: var(--field-h) !important;
+  line-height: calc(var(--field-h) - 2px) !important;
+}
+
+/* Placeholder y texto legibles */
+.login-panel .p-inputtext::placeholder{ color: var(--placeholder-ink) !important; }
+.login-panel .p-inputtext{ color:#111827 !important; }
+/* ====== Header “Reporte de …” dentro de DataTable (caption) ====== */
+.table-caption{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:.65rem .8rem;
+  border-bottom:1px solid rgba(124,58,237,.22);
+  background:
+    linear-gradient(180deg, rgba(124,58,237,.06), rgba(124,58,237,.03));
+}
+.table-caption .title{
+  font-weight:800; letter-spacing:.03em; color:#3b2874;
+  text-transform: uppercase; font-size:.92rem;
+}
+.table-caption .left{ display:flex; align-items:center; gap:1rem }
+.table-caption .toggles{ display:flex; align-items:center; gap:.75rem }
+.table-caption .cb{ display:inline-flex; align-items:center; gap:.45rem; font-weight:600; color:#4b3aa0 }
+
+/* ====== DataTable “violet” ====== */
+.table--violet.p-datatable .p-datatable-thead > tr > th{
+  position: sticky; top: 0; z-index: 2;
+  background:
+    linear-gradient(180deg, #fff, #fbf8ff);
+  color:#3b2874;                        /* tinta lavanda */
+  border-bottom:1px solid rgba(124,58,237,.22);
+  height:44px; vertical-align:middle;
+  font-weight:800; letter-spacing:.02em; font-size:.82rem;
+}
+
+/* sort icons y hover */
+.table--violet .p-sortable-column .p-sortable-column-icon{
+  color:#7C3AED; opacity:.9;
+}
+.table--violet .p-datatable-tbody > tr:hover{
+  background: rgba(124,58,237,.06);
+}
+
+/* gridlines suaves */
+.table--violet .p-datatable-wrapper{
+  border-left: 1px solid rgba(124,58,237,.10);
+  border-right: 1px solid rgba(124,58,237,.10);
+}
+.table--violet .p-datatable-tbody > tr > td{
+  border-color: rgba(124,58,237,.10);
+}
+
+/* paginador limpio + tono violeta */
+.table--violet .p-paginator{
+  border-top:1px solid rgba(124,58,237,.18);
+  padding:.25rem .65rem;
+}
+.table--violet .p-paginator .p-paginator-page.p-highlight{
+  background: rgba(124,58,237,.12);
+  color:#3b2874; border-color: rgba(124,58,237,.28);
+  font-weight:700;
+}
+/* ===== Card contenedor (ya lo tenías) */
+.doa-card{
+  background:#fff; border-radius:16px;
+  border:1px solid rgba(124,58,237,.18);
+  box-shadow:0 10px 30px rgba(0,0,0,.06);
+  overflow:hidden;
+}
+
+/* ===== Header del DataTable (prop header) */
+.table--violet .p-datatable-header,
+.dt-header-violet{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:.75rem; padding:.65rem .85rem;
+  background:
+    linear-gradient(180deg, rgba(124,58,237,.10), rgba(124,58,237,.05));
+  border-bottom:1px solid rgba(124,58,237,.22);
+}
+.dt-header-violet .title{
+  font-weight:800; letter-spacing:.02em; color:#2d2a4a; text-transform:uppercase; font-size:.92rem;
+}
+.dt-header-violet .subtitle{ color:#6b678d; font-weight:600; font-size:.85rem }
+.dt-header-violet .left{ display:flex; flex-direction:column; }
+.dt-header-violet .right small{ color:#6b678d }
+
+/* ===== Encabezados “pegajosos” y lila */
+.table--violet.p-datatable .p-datatable-thead > tr > th{
+  position: sticky; top: 0; z-index: 2;
+  background: linear-gradient(180deg, #ffffff, #fbf8ff);
+  color:#3b2874;
+  border-bottom:1px solid rgba(124,58,237,.22);
+  height:44px; vertical-align:middle;
+  font-weight:800; letter-spacing:.02em; font-size:.82rem;
+}
+.table--violet .p-sortable-column .p-sortable-column-icon{ color:#7C3AED; opacity:.9 }
+
+/* ===== Filas, gridlines y hover */
+.table--violet .p-datatable-wrapper{ border-left:1px solid rgba(124,58,237,.10); border-right:1px solid rgba(124,58,237,.10) }
+.table--violet .p-datatable-tbody > tr > td{ border-color:rgba(124,58,237,.10) }
+.table--violet .p-datatable-tbody > tr:hover{ background:rgba(124,58,237,.06) }
+
+/* ===== Paginador */
+.table--violet .p-paginator{ border-top:1px solid rgba(124,58,237,.18); padding:.25rem .65rem }
+.table--violet .p-paginator .p-paginator-page.p-highlight{
+  background: rgba(124,58,237,.12); color:#3b2874; border-color: rgba(124,58,237,.28); font-weight:700;
+}
+
+/* ===== Responsivo: en pantallas pequeñas, altura mayor para scroll */
+@media (max-width: 1024px){
+  .table--violet.p-datatable{ font-size:.9rem }
+}
+@media (max-width: 768px){
+  .table--violet.p-datatable{ font-size:.86rem }
+}
+/* Sidebar: que el content sea flex columna y sin padding extra */
+.p-sidebar.centros-sidebar .p-sidebar-content{
+  padding: 0 !important;
+  height: 100%;
+  display: flex; flex-direction: column;
+}
+
+/* Drawer layout */
+.centros-drawer{
+  display:flex; flex-direction:column;
+  height:100%; min-height:0;       /* 👈 necesario para que el body pueda scrollear */
+}
+
+/* HEADER pegado arriba */
+.cd-header{
+  position: sticky; top: 0; z-index: 2;
+  padding: 14px 16px 10px;
+  background: #fff;
+  border-bottom: 1px solid rgba(124,58,237,.18);
+  box-shadow: 0 6px 16px rgba(124,58,237,.08);
+}
+.cd-search{ margin-top:10px }
+
+/* BODY que scrollea */
+.cd-body{
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 10px 12px 12px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+
+/* FOOTER pegado abajo (opcional) */
+.cd-footer{
+  position: sticky; bottom: 0; z-index: 1;
+  padding: 10px 12px 12px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.6), #fff 40%);
+  border-top: 1px solid rgba(124,58,237,.18);
+  display:flex; flex-direction:column; gap:8px;
+}
+/* Botones “Centro de Costo”: blancos + borde morado, más altos y anchos */
+.cc-btn.p-button {
+  width: 100%;
+  justify-content: flex-start;          /* texto alineado a la izquierda */
+  height: 46px;                         /* ↑ más altos */
+  padding: .55rem .9rem;
+  border-radius: 16px;
+  border-width: 1.8px !important;
+  border-color: var(--brand) !important;
+  background: #fff !important;
+  color: var(--brand) !important;
+  font-weight: 800;
+  letter-spacing: .2px;
+  box-shadow: 0 4px 10px rgba(124,58,237,.08);
+}
+
+/* hover/focus: morado MUY suave */
+.cc-btn.p-button:enabled:hover,
+.cc-btn.p-button.p-focus {
+  background: rgba(124,58,237,.08) !important;
+  box-shadow:
+    0 0 0 1px rgba(124,58,237,.25) inset,
+    0 6px 14px rgba(124,58,237,.14);
+}
+
+/* estado activo (centro seleccionado): morado sólido y texto blanco */
+.cc-btn.is-active {
+  background: linear-gradient(135deg, var(--brand), var(--brand-2)) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  box-shadow: 0 10px 22px rgba(124,58,237,.28);
+}
+
+/* efecto “scrolling”: mientras se mueve la lista, los no-activos toman morado suave */
+.cd-body.is-scrolling .cc-btn:not(.is-active) {
+  background: rgba(124,58,237,.10) !important;
+}
+
+/* Ajustes de la lista para que los botones se vean más “anchos” visualmente */
+.cd-body {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 12px;
+}
+/* Contenedor general */
+.centros-drawer{ display:flex; flex-direction:column; height:100% }
+
+/* Header fijo, más arriba y con espacio para el botón de cerrar (esquina der.) */
+.cd-header{
+  position: sticky; top: 0; z-index: 2;
+  background: var(--surface-card);
+  padding: 10px 56px 10px 16px; /* ← derecha 56px para que no choque con la X */
+  border-bottom: 1px solid var(--surface-border);
+}
+.cd-title{
+  margin: 0 0 2px 0;            /* “sube” el título */
+  font-size: 1.25rem;           /* 20px aprox */
+  font-weight: 800;
+  color: var(--ink);
+}
+.cd-subtitle{
+  display:block;
+  margin: 0 0 8px 0;            /* pegadito al título */
+  font-size: .9rem;
+  color: var(--muted);
+}
+
+/* Buscador con icono a la izquierda, sin sobreescribir el texto */
+.cd-search{ display:block; width:100% }
+.cd-search > i{
+  left: 12px !important; top: 50% !important; transform: translateY(-50%) !important;
+  color: var(--input-icon) !important;
+}
+.cd-search-input.p-inputtext{
+  width:100%;
+  height: 44px !important;
+  border-radius: 12px !important;
+  padding-left: 2.3rem !important; /* ← deja espacio para el icono */
+  padding-right: .9rem !important;
+}
+
+/* Body scrollable */
+.cd-body{
+  flex:1 1 auto; overflow:auto;
+  padding: 12px 16px 12px 16px;
+  display:flex; flex-direction:column; gap:10px;
+}
+
+/* Footer fijo */
+.cd-footer{
+  position: sticky; bottom: 0; z-index: 1;
+  background: var(--surface-card);
+  padding: 10px 16px 14px 16px;
+  border-top: 1px solid var(--surface-border);
+  display:flex; flex-direction:column; gap:8px;
+}
+
+/* Botones de centros: (ya definidos) — por si no los tenías completos */
+.cc-btn.p-button{
+  width:100% !important; justify-content:center !important;
+  border-radius:999px !important; border-width:2px !important;
+  border-color:var(--brand) !important; background:#fff !important;
+  color:var(--brand) !important; font-weight:900 !important; letter-spacing:.2px;
+}
+.cc-btn--xl.p-button{ height:58px !important; line-height:56px !important; font-size:1rem !important; }
+.cc-btn .p-button-label{ flex:1 1 auto !important; text-align:center !important; }
+.cc-btn.is-active{
+  background:linear-gradient(135deg,var(--brand),var(--brand-2)) !important;
+  border-color:transparent !important; color:#fff !important;
+}
+.cd-body.is-scrolling .cc-btn:not(.is-active){ background:rgba(124,58,237,.10) !important; }
+/* ===== Dialog look “violet glass” ===== */
+.rg-dialog.p-dialog .p-dialog-content{
+  background:
+    radial-gradient(100% 140% at 10% 0%, rgba(124,58,237,.06), transparent 60%),
+    radial-gradient(100% 140% at 90% 100%, rgba(180,61,227,.06), transparent 60%),
+    linear-gradient(180deg, #ffffff, #faf7ff);
+}
+.rg-form{ display:flex; flex-direction:column; gap:14px }
+
+/* ===== Form grid ===== */
+.rg-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:12px;
+}
+.rg-span-2{ grid-column: 1 / -1 }
+.rg-input.p-inputtext,
+.rg-input .p-inputtext,
+.rg-input.p-inputnumber .p-inputtext,
+.rg-input.p-dropdown{ height:46px }
+.rg-grid .p-float-label > label{ color:#6b678d }
+
+/* ===== Steps block ===== */
+.rg-steps{
+  background:#fff;
+  border:1px solid rgba(124,58,237,.18);
+  border-radius:18px;
+  box-shadow:0 12px 28px rgba(16,0,32,.06);
+  padding:10px;
+}
+.rg-head{ display:flex; flex-direction:column; gap:10px; padding:4px 6px 10px }
+.rg-head-title{ font-weight:800; font-size:1.2rem; color:#2d2a4a; margin-left:6px }
+
+/* barra violeta con “+” y texto Agregar */
+.rg-head-bar{
+  display:flex; align-items:center; gap:10px;
+  border-radius:14px;
+  padding:8px 10px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.35);
+}
+.rg-add-chip{
+  width:32px; height:32px; border-radius:999px !important;
+  background:#fff !important; color:var(--brand) !important; border:0 !important;
+  box-shadow: 0 6px 16px rgba(0,0,0,.12);
+}
+.rg-head-label{
+  color:#fff; font-weight:800; letter-spacing:.2px;
+}
+
+/* fila: Tipo | Nivel | eliminar */
+.rg-step{
+  display:grid; align-items:center;
+  grid-template-columns: 1fr 140px 42px;
+  gap:10px;
+  padding:10px;
+  border:1px solid rgba(124,58,237,.14);
+  border-radius:14px;
+  margin:8px 6px;
+  background: linear-gradient(180deg, #fff, #fbf8ff);
+}
+.rg-step .p-inputtext{ height:46px }
+.rg-del.p-button{ width:42px; height:42px; border-radius:12px }
+
+/* ===== Actions ===== */
+.rg-actions{
+  display:flex; justify-content:space-between; align-items:center;
+  gap:10px; padding-top:6px;
+}
+.rg-save{ min-width:220px; height:46px }
+
+/* Responsive */
+@media (max-width: 820px){
+  .rg-grid{ grid-template-columns: 1fr }
+  .rg-step{ grid-template-columns: 1fr 120px 40px }
+}
+/* —— Botón outlined morado (aplica a p-button-sm p-button-outlined) —— */
+.p-button.p-button-outlined {
+  border-color: var(--brand) !important;
+  color: var(--brand) !important;
+  background: transparent !important;
+}
+
+/* tamaño small (por si tu tema lo hace más bajito) */
+.p-button.p-button-outlined.p-button-sm {
+  height: 34px;               /* opcional: ajusta si quieres */
+  border-width: 1.5px;
+}
+
+/* hover / active / focus en morado suave */
+.p-button.p-button-outlined:enabled:hover,
+.p-button.p-button-outlined:enabled:active,
+.p-button.p-button-outlined.p-focus {
+  border-color: var(--brand) !important;
+  color: var(--brand) !important;
+  background: rgba(124, 58, 237, .08) !important; /* morado suave */
+  box-shadow: 0 0 0 0.15rem rgba(124, 58, 237, .15);
+}
+
+/* iconos dentro del botón outlined */
+.p-button.p-button-outlined .p-button-icon {
+  color: var(--brand) !important;
+}
+
+/* si usas severity=secondary o success con outlined, fuerzo morado */
+.p-button.p-button-outlined.p-button-secondary,
+.p-button.p-button-outlined.p-button-success,
+.p-button.p-button-outlined.p-button-info,
+.p-button.p-button-outlined.p-button-help {
+  border-color: var(--brand) !important;
+  color: var(--brand) !important;
+}
+/* Más aire entre campos del grid */
+.rg-grid.rg-grid--spacious{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 22px;         /* ← separa columnas */
+  row-gap: 16px;            /* ← separa filas */
+}
+.rg-span-2{ grid-column: 1 / -1; }
+
+/* Campo con caption arriba */
+.rg-field{ display:flex; flex-direction:column; gap:6px; }
+.rg-caption{
+  margin: 0 0 2px 6px;
+  font-size: .78rem;
+  color: #6b678d;
+  font-weight: 600;
+}
+
+/* Alto uniforme de inputs */
+.rg-input.p-inputtext,
+.rg-input .p-inputtext,
+.rg-input.p-inputnumber .p-inputtext,
+.rg-input.p-dropdown{ height:46px; }
+
+/* Botón outlined en morado dentro del modal */
+.rg-dialog .btn-outline-violet.p-button.p-button-outlined{
+  border-color: var(--brand) !important;
+  color: var(--brand) !important;
+  background: transparent !important;
+}
+.rg-dialog .btn-outline-violet.p-button.p-button-outlined:enabled:hover{
+  background: rgba(124,58,237,.08) !important;
+  box-shadow: 0 0 0 1px rgba(124,58,237,.20) inset;
+}
