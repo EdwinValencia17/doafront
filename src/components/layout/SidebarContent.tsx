@@ -32,7 +32,13 @@ export function SidebarContent({ hide }: { hide: HideFn }) {
       <div className="sb-scroll">
         <ul className="list-none p-3 m-0">
           <li>
-            <StyleToggle selector="@next" enterFromClassName="hidden" enterActiveClassName="slidedown" leaveToClassName="hidden" leaveActiveClassName="slideup">
+            <StyleToggle
+              selector="@next"
+              enterFromClassName="hidden"
+              enterActiveClassName="slidedown"
+              leaveToClassName="hidden"
+              leaveActiveClassName="slideup"
+            >
               <div className="p-ripple p-3 flex align-items-center justify-content-between text-600 cursor-pointer">
                 <span className="font-medium">FAVORITOS</span>
                 <i className="pi pi-chevron-down" />
@@ -40,17 +46,49 @@ export function SidebarContent({ hide }: { hide: HideFn }) {
               </div>
             </StyleToggle>
 
+            {/* Dashboard */}
             <ul className="list-none p-0 m-0 overflow-hidden">
               <li>
-                <a className="sb-item" onClick={(e) => { hide(e); nav("/"); }}>
+                <a
+                  className="sb-item"
+                  onClick={(e) => {
+                    hide(e);
+                    nav("/");
+                  }}
+                >
                   <i className="pi pi-home mr-2" />
                   <span className="font-medium">Dashboard</span>
                   <Ripple />
                 </a>
               </li>
+            </ul>
 
+            {/* 👇 NUEVO bloque: GESTIONES (StyleToggle) con Reglas de Negocio adentro */}
+            <StyleToggle
+              selector="@next"
+              enterFromClassName="hidden"
+              enterActiveClassName="slidedown"
+              leaveToClassName="hidden"
+              leaveActiveClassName="slideup"
+            >
+              <div className="p-ripple p-3 flex align-items-center justify-content-between text-600 cursor-pointer">
+                <span className="font-medium">
+                  GESTIONES
+                </span>
+                <i className="pi pi-chevron-down" />
+                <Ripple />
+              </div>
+            </StyleToggle>
+
+            <ul className="list-none p-0 m-0 overflow-hidden">
               <li>
-                <a className="sb-item" onClick={(e)=>{ hide(e); nav("/doa/reglas"); }}>
+                <a
+                  className="sb-item"
+                  onClick={(e) => {
+                    hide(e);
+                    nav("/doa/reglas");
+                  }}
+                >
                   <i className="pi pi-sitemap mr-2" />
                   <span className="font-medium">Reglas de Negocio</span>
                   <Ripple />
@@ -59,10 +97,47 @@ export function SidebarContent({ hide }: { hide: HideFn }) {
             </ul>
           </li>
         </ul>
+         <StyleToggle
+              selector="@next"
+              enterFromClassName="hidden"
+              enterActiveClassName="slidedown"
+              leaveToClassName="hidden"
+              leaveActiveClassName="slideup"
+            >
+              <div className="p-ripple p-3 flex align-items-center justify-content-between text-600 cursor-pointer">
+                <span className="font-medium">
+                  GESTION DE PO
+                </span>
+                <i className="pi pi-chevron-down" />
+                <Ripple />
+              </div>
+            </StyleToggle>
+
+            <ul className="list-none p-0 m-0 overflow-hidden">
+              <li>
+                <a
+                  className="sb-item"
+                  onClick={(e) => {
+                    hide(e);
+                    nav("doa/nivelcero");
+                  }}
+                >
+                  <i className="pi pi-sitemap mr-2" />
+                  <span className="font-medium">Bandeja Nivel Cero</span>
+                  <Ripple />
+                </a>
+              </li>
+            </ul>
 
         <ul className="list-none p-3 m-0">
           <li>
-            <StyleToggle selector="@next" enterFromClassName="hidden" enterActiveClassName="slidedown" leaveToClassName="hidden" leaveActiveClassName="slideup">
+            <StyleToggle
+              selector="@next"
+              enterFromClassName="hidden"
+              enterActiveClassName="slidedown"
+              leaveToClassName="hidden"
+              leaveActiveClassName="slideup"
+            >
               <div className="p-ripple p-3 flex align-items-center justify-content-between text-600 cursor-pointer">
                 <span className="font-medium">APLICACIÓN</span>
                 <i className="pi pi-chevron-down" />
@@ -79,7 +154,13 @@ export function SidebarContent({ hide }: { hide: HideFn }) {
                 </a>
               </li>
               <li>
-                <a className="sb-item" onClick={(e)=>{ hide(e); nav("/doa/reglas"); }}>
+                <a
+                  className="sb-item"
+                  onClick={(e) => {
+                    hide(e);
+                    nav("/doa/reglas");
+                  }}
+                >
                   <i className="pi pi-cog mr-2" />
                   <span className="font-medium">Reglas de Negocio</span>
                   <Ripple />
@@ -96,7 +177,11 @@ export function SidebarContent({ hide }: { hide: HideFn }) {
           <Avatar label={avatarLabel} shape="circle" />
           <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.2 }}>
             <span className="font-bold">{displayName}</span>
-            {!!user?.email && <small className="text-600" style={{ opacity: 0.8 }}>{user.email}</small>}
+            {!!user?.email && (
+              <small className="text-600" style={{ opacity: 0.8 }}>
+                {user.email}
+              </small>
+            )}
             <div style={{ display: "flex", gap: 6, marginTop: 6, flexWrap: "wrap" }}>
               {!!user?.role && <Tag value={user.role} />}
               {!!user?.globalId && <Tag value={`ID: ${user.globalId}`} severity="info" />}

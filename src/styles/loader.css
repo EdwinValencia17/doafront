@@ -1,0 +1,258 @@
+/* ─────────────────────────────────────────────────────────
+   Neon Loader — Halo BLANCO + Glass morado suave (fondo borroso)
+   Sin colores alrededor del logo. Logo BLANCO intocable.
+   ───────────────────────────────────────────────────────── */
+
+/* ===== Paleta y controles ===== */
+:root{
+  /* fondo glass morado (suave) */
+  --glass-violet: rgba(124, 58, 237, .14);
+  --glass-violet-2: rgba(180, 61, 227, .12);
+
+  /* blur/saturación del fondo de la página mientras carga */
+  --page-blur-strength: 6px;
+  --page-saturate: 120%;
+
+  /* tipografía sobria sobre fondo claro borroso */
+  --ink:  #2b1d63;    /* números */
+  --ink2: #5a4aa3;    /* label */
+
+  /* fosa (separación del logo) */
+  --moat: 67.5%;      /* sube a 68.5–69.5% si aún ves “contaminación” */
+}
+
+/* ===== Overlay y layout ===== */
+.nr-overlay{ position:fixed; inset:0; z-index:9999; pointer-events:none; opacity:0; transition:opacity .18s ease; }
+.nr-overlay.is-on{ opacity:1; pointer-events:auto; }
+
+/* Fondo CLARO borroso + glass morado suave */
+.nr-veil{
+  position:absolute; inset:0;
+  backdrop-filter: blur(var(--page-blur-strength)) saturate(var(--page-saturate));
+  background:
+    radial-gradient(120% 160% at 10% 0%, var(--glass-violet), transparent 55%),
+    radial-gradient(120% 160% at 90% 100%, var(--glass-violet-2), transparent 55%),
+    rgba(255,255,255,.02); /* casi transparente: solo activa el blur */
+}
+
+/* Centro */
+.nr-stage{ position:absolute; inset:0; display:grid; place-items:center; }
+.nr-wrap{
+  position:relative; width:min(78vmin,360px); aspect-ratio:1/1;
+}
+
+/* ESCUDO BLANCO: aro limpio para proteger el borde del logo (no requiere HTML extra) */
+.nr-wrap::before{
+  content:"";
+  position:absolute; inset:16%;           /* igual que el logo */
+  border-radius:50%;
+  z-index:2;                               /* sobre efectos, bajo el logo */
+  pointer-events:none;
+  /* aro sólido blanco + leve brillo interior */
+  box-shadow:
+    0 0 0 6px #fff,
+    inset 0 0 18px rgba(255,255,255,.35);
+  background: transparent;
+}
+
+/* ===== Plato blanco (se mantiene) ===== */
+.nr-plate{
+  position:absolute; inset:12%;
+  border-radius:50%;
+  background: radial-gradient(ellipse at 50% 45%, #ffffff, #f6f7ff 70%, #eef0ff);
+  box-shadow: 0 18px 40px rgba(0,0,0,.18), inset 0 2px 8px rgba(0,0,0,.06);
+  z-index:1;
+}
+.nr-plate::after{
+  content:""; position:absolute; inset:-12%;
+  border-radius:50%;
+  background: radial-gradient(closest-side, rgba(255,255,255,.85), rgba(255,255,255,0));
+  filter: blur(12px);
+}
+
+/* ===== Logo que gira (intocable) ===== */
+.nr-logo-spin{
+  position:absolute; inset:16%;
+  width:68%; height:68%; margin:auto;
+  object-fit:contain; z-index:3;             /* SIEMPRE arriba */
+  animation: spin var(--spinms, 4800ms) linear infinite;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,.25));
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== Halo BLANCO (respira) — sin colores ===== */
+.nr-aura{ position:absolute; inset:6.5%; border-radius:50%; pointer-events:none; z-index:0; }
+/* tres capas blancas, distintas escalas/blur; TODAS con hueco central */
+.nr-aura span{
+  position:absolute; inset:-10%;
+  border-radius:50%;
+  filter: blur(22px);
+  opacity:.45;
+  animation: aura-breathe 3.2s ease-in-out infinite;
+  background: radial-gradient(closest-side, rgba(255,255,255,.85), rgba(255,255,255,0) 70%);
+  /* hueco para no tocar el logo */
+  -webkit-mask: radial-gradient(closest-side, transparent var(--moat), #000 calc(var(--moat) + 1%));
+          mask: radial-gradient(closest-side, transparent var(--moat), #000 calc(var(--moat) + 1%));
+}
+.nr-aura span:nth-child(2){ inset:-16%; filter: blur(30px); opacity:.35; }
+.nr-aura span:nth-child(3){ inset:-22%; filter: blur(40px); opacity:.28; }
+@keyframes aura-breathe{ 0%,100%{ transform:scale(1); opacity:.42 } 50%{ transform:scale(1.06); opacity:.58 } }
+
+/* ===== Efecto que “sale del logo”, pero SOLO BLANCO ===== */
+.nr-emanate{
+  position:absolute; inset:6%;
+  border-radius:50%; pointer-events:none; z-index:1;
+  -webkit-mask: radial-gradient(closest-side, transparent var(--moat), #000 calc(var(--moat) + 1%));
+          mask: radial-gradient(closest-side, transparent var(--moat), #000 calc(var(--moat) + 1%));
+}
+
+/* Aro principal — blanco suave */
+.nr-ring{
+  position:absolute; inset:-1%; border-radius:50%;
+  filter: blur(10px);
+  opacity:.70;               /* sube/baja para más/menos punch */
+  mix-blend-mode: normal;
+  background:
+    radial-gradient(closest-side, rgba(255,255,255,.60), rgba(255,255,255,0) 66%),
+    conic-gradient(from 0deg,
+      rgba(255,255,255,.00) 0deg,
+      rgba(255,255,255,.85) 40deg,
+      rgba(255,255,255,.00) 80deg,
+      rgba(255,255,255,.85) 160deg,
+      rgba(255,255,255,.00) 200deg,
+      rgba(255,255,255,.85) 280deg,
+      rgba(255,255,255,.00) 320deg);
+  animation: ring-spin 7.2s linear infinite;
+}
+@keyframes ring-spin{ to{ transform:rotate(360deg) } }
+
+/* Rayos finos — blancos, alejados del centro */
+.nr-rays{
+  position:absolute; inset:-6%; border-radius:50%;
+  filter: blur(9px);
+  opacity:.42;
+  mix-blend-mode: normal;
+  background:
+    radial-gradient(closest-side, transparent calc(var(--moat) + 1.5%),
+      rgba(255,255,255,.28) calc(var(--moat) + 2%),
+      transparent calc(var(--moat) + 4%)),
+    repeating-conic-gradient(from 0deg,
+      rgba(255,255,255,0) 0deg 7deg,
+      rgba(255,255,255,.55) 7deg 8.5deg);
+  animation: rays-rot 12s linear infinite;
+}
+@keyframes rays-rot{ to{ transform:rotate(-360deg) } }
+
+/* Barrido — blanco */
+.nr-burst{
+  position:absolute; inset:0%; border-radius:50%;
+  filter: blur(8px);
+  opacity:.55;
+  mix-blend-mode: normal;
+  background: conic-gradient(from 0deg,
+    rgba(255,255,255,0)   0deg,
+    rgba(255,255,255,.85) 18deg,
+    rgba(255,255,255,.70) 28deg,
+    rgba(255,255,255,0)   60deg);
+  animation: burst-sweep 2.2s cubic-bezier(.25,.6,.35,1) infinite;
+}
+@keyframes burst-sweep{
+  0%   { transform:rotate(0deg);   opacity:.30 }
+  35%  { opacity:.75 }
+  60%  { opacity:.52 }
+  100% { transform:rotate(360deg); opacity:.30 }
+}
+
+/* ===== Energía inferior — blanca sutil ===== */
+.nr-energy{
+  position:absolute; left:50%; transform:translateX(-50%);
+  bottom:-26%;
+  width:48%; height:60%;
+  display:flex; justify-content:space-between;
+  pointer-events:none; z-index:0;
+}
+.nr-energy>span{
+  flex:0 0 2px; border-radius:2px;
+  background: linear-gradient(180deg,
+    rgba(255,255,255,0),
+    rgba(255,255,255,.9),
+    rgba(255,255,255,0));
+  animation: energy-flow 1.6s ease-in-out infinite;
+}
+.nr-energy>span:nth-child(2){ animation-delay:.15s }
+.nr-energy>span:nth-child(3){ animation-delay:.35s }
+.nr-energy>span:nth-child(4){ animation-delay:.55s }
+@keyframes energy-flow{
+  0%{opacity:0; transform:translateY(-15%)}
+  45%{opacity:1; transform:translateY(25%)}
+  100%{opacity:0; transform:translateY(120%)}
+}
+
+/* ===== Texto ===== */
+.nr-labelwrap{
+  position:absolute; left:50%; transform:translateX(-50%);
+  bottom:-12%;
+  display:grid; place-items:center; text-align:center;
+  z-index:4;
+}
+.nr-percent{
+  font-size: clamp(18px,5.4vmin,28px);
+  font-weight: 900;
+  margin: 0;
+  color: var(--ink);
+  text-shadow: 0 1px 0 rgba(255,255,255,.7), 0 6px 18px rgba(0,0,0,.06);
+}
+.nr-label{
+  margin-top: 2px;
+  color: var(--ink2);
+  font-weight: 800;
+  letter-spacing: .02em;
+  font-size: 1.0rem;
+}
+
+/* ===== Responsive ===== */
+@media (max-width:480px){
+  .nr-wrap{ width:min(82vmin,360px) }
+  .nr-label{ font-size:.95rem }
+}
+/* === Disco giratorio en morado suave (un toque más oscuro que el glass) === */
+:root{
+  /* tu glass morado está ~.14; el disco será un poco más oscuro */
+  --spin-violet: rgba(124, 58, 237, 0.28);  /* morado suave del disco */
+  --spin-core:   rgba(124, 58, 237, 0.18);  /* relleno tenue interno */
+}
+
+/* usamos el aro que ya gira (.nr-ring) como “disco” morado suave */
+.nr-ring{
+  /* seguimos respetando el moat/máscara existentes (no toca el logo) */
+  inset: -1%;
+  border-radius: 50%;
+  filter: blur(9px);
+  opacity: .66;                 /* punch moderado */
+  mix-blend-mode: normal;       /* no contamina blancos */
+  animation: ring-spin 7.2s linear infinite;
+
+  /* fondo ahora es un “disco” morado suave con leve barrido */
+  background:
+    /* relleno tenue para sensación de disco */
+    radial-gradient(closest-side, var(--spin-core), rgba(255,255,255,0) 66%),
+    /* barrido morado suave para que se perciba el giro */
+    conic-gradient(from 0deg,
+      rgba(124,58,237,0.00) 0deg,
+      var(--spin-violet)    36deg,
+      rgba(124,58,237,0.00) 72deg,
+      var(--spin-violet)   108deg,
+      rgba(124,58,237,0.00) 144deg,
+      var(--spin-violet)   180deg,
+      rgba(124,58,237,0.00) 216deg,
+      var(--spin-violet)   252deg,
+      rgba(124,58,237,0.00) 288deg,
+      var(--spin-violet)   324deg,
+      rgba(124,58,237,0.00) 360deg
+    );
+}
+
+/* si lo quieres aún más sutil, baja la opacidad general del disco */
+@media (prefers-reduced-motion: no-preference){
+  .nr-ring{ opacity: .58; }  /* opcional */
+}

@@ -1007,6 +1007,10 @@ header.topbar::after{
   background: transparent !important;
 }
 
+.dt-actions .btn-login-movable{
+  margin-left: var(--login-offset-x, 530px) !important; /* tú mandas el valor */
+}
+
 /* tamaño small (por si tu tema lo hace más bajito) */
 .p-button.p-button-outlined.p-button-sm {
   height: 34px;               /* opcional: ajusta si quieres */
@@ -1069,4 +1073,247 @@ header.topbar::after{
 .rg-dialog .btn-outline-violet.p-button.p-button-outlined:enabled:hover{
   background: rgba(124,58,237,.08) !important;
   box-shadow: 0 0 0 1px rgba(124,58,237,.20) inset;
+}
+
+.logo-mask{
+  width: var(--logo-w-lg);
+  height: var(--logo-h-lg);
+  position: relative;
+  top: calc(-1 * var(--logo-lift-lg));
+  left: calc(-1 * var(--logo-shift-lg));
+  margin-bottom: 10px;
+
+  display: block;
+  object-fit: contain;        /* para <img> */
+  object-position: left center;
+
+  /* sin glass ni mezclas raras */
+  mix-blend-mode: normal;
+  filter:
+    drop-shadow(0 1px 0 rgba(255,255,255,.55))
+    drop-shadow(0 14px 28px rgba(0,0,0,.28));
+}
+
+@media (max-width:920px){
+  .logo-mask{
+    width: var(--logo-w-sm);
+    height: var(--logo-h-sm);
+    top: calc(-1 * var(--logo-lift-sm));
+    left: calc(-1 * var(--logo-shift-sm));
+  }
+}
+/* Evita scroll horizontal del viewport */
+html, body { overflow-x: hidden; }
+
+/* El layout ocupa el ancho de la ventana y NO crece más */
+.app-shell { height: 100vh; display: grid; grid-template-rows: 64px 1fr; overflow: hidden; }
+.app-shell > header.topbar { position: sticky; top: 0; left: 0; right: 0; }
+
+/* El área que scrollea (x/y) es SOLO el contenido */
+.app-content{
+  min-width: 0;            /* importante para que los hijos no “rompan” el ancho */
+  overflow: auto;          /* permite scroll interno */
+}
+
+/* Contenedor para vistas con tablas anchas */
+.page-scroll-x{ overflow: auto; }
+.page-scroll-x .p-datatable-table{ min-width: 1200px; } /* ajusta a tu ancho real */
+/* ===== Centro con líneas animadas ===== */
+.nr-core{
+  position:absolute; inset:10%; border-radius:50%;
+  /* deja un leve vidrio para que el logo destaque */
+  background:
+    radial-gradient(60% 60% at 50% 40%, rgba(255,255,255,.10), rgba(255,255,255,.04) 70%, rgba(255,255,255,.02) 100%),
+    radial-gradient(closest-side, rgba(0,0,0,.20), transparent 62%);
+  display:grid; place-items:center; text-align:center;
+  isolation:isolate;                 /* para controlar mezcla de capas internas */
+  animation:nr-breathe 2.2s ease-in-out infinite;
+}
+
+/* Capa 1: líneas radiales (giran) */
+.nr-core::before{
+  content:""; position:absolute; inset:0; border-radius:50%;
+  /* franjas radiales multicolor */
+  background:
+    repeating-conic-gradient(
+      from 0deg,
+      color-mix(in oklab, var(--nr-blue) 92%, transparent) 0 6deg,
+      color-mix(in oklab, var(--nr-brand-a) 92%, transparent) 6deg 12deg,
+      color-mix(in oklab, var(--nr-brand-b) 92%, transparent) 12deg 18deg,
+      color-mix(in oklab, var(--nr-cyan) 92%, transparent) 18deg 24deg
+    );
+  mix-blend-mode: screen;            /* brillo sobre el vidrio */
+  opacity:.55;
+  /* recorta al círculo interno */
+  mask: radial-gradient(closest-side, #000 98%, transparent 100%);
+  animation: nr-core-spin 7s linear infinite;
+  z-index: 0;                        /* por debajo del contenido/imagen */
+}
+
+/* Capa 2: líneas verticales (flujo descendente) */
+.nr-core::after{
+  content:""; position:absolute; inset:8% 22%; border-radius:8px;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(0,180,255,.0) 0 8px,
+      rgba(0,180,255,.75) 8px 10px,
+      rgba(124,58,237,.0) 10px 22px
+    );
+  filter: drop-shadow(0 0 8px rgba(0,180,255,.45));
+  mix-blend-mode: screen;
+  opacity:.75;
+  animation: nr-core-flow 1.8s ease-in-out infinite;
+  z-index: 0;
+}
+
+/* Logo/porcentaje siguen encima */
+.nr-core > *{ position:relative; z-index:1 }
+
+/* Animaciones */
+@keyframes nr-core-spin { to { transform: rotate(360deg) } }
+@keyframes nr-core-flow {
+  0%   { transform: translateY(-12%); opacity:.45 }
+  45%  { transform: translateY(10%);  opacity:.95 }
+  100% { transform: translateY(120%); opacity:.0  }
+}
+/* Extiende el cuadro morado EXISTENTE a todo el header */
+.doa-table.table--violet.table--responsive .p-datatable-header{
+  /* ocupar todo el ancho del contenedor de la tabla */
+  width: 99%;
+  display: flex; align-items: center; justify-content: space-between;
+
+  /* que se vea como la lámina morada oscura */
+  background: linear-gradient(
+              180deg,
+              color-mix(in oklab, var(--brand) 14%, #ffffff) 0%,
+              color-mix(in oklab, var(--brand) 10%, #ffffff) 100%
+            ) !important;
+  border: 1px solid color-mix(in oklab, var(--brand) 45%, #ffffff) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.35),
+    0 6px 16px rgba(124,58,237,.12);
+
+  /* acolchado interno + un “respiro” del borde de la card */
+  padding: .65rem .8rem;
+  margin: 6px 8px;          /* ← esto crea el inset dentro de la card */
+  border-radius: 12px;
+}
+
+/* Si usas un wrapper .dt-header-violet, que no pinte otro fondo */
+.doa-table.table--violet.table--responsive .dt-header-violet{
+  background: transparent !important;
+  border: 0 !important;
+}
+
+
+
+/* El contenedor derecho del header reparte espacio entre los dos bloques */
+.dt-header-violet .right{
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Filtros a la izq, Login a la der */
+  gap: 102.95rem;
+  width: 100%;
+}
+
+/* Bloque de acciones (contador + Filtros) */
+.dt-actions{ display:flex; align-items:center; gap:.5rem }
+
+/* Botón “Volver al login” independiente, mismo estilo outlined */
+.btn-login-standalone.p-button.p-button-outlined{
+  border-color: var(--brand) !important;
+  color: var(--brand) !important;
+  background: transparent !important;
+}
+
+/* (Opcional) si quieres moverlo unos px desde la derecha */
+.dt-login-wrap{ margin-right: var(--login-offset-right, 0px); }
+/* Header de la DataTable: 3 columnas (L | espacio flexible | R) */
+.dt-header-violet{
+  display: grid !important;
+  grid-template-columns: auto 1fr auto;  /* ← clave */
+  align-items: center;
+  column-gap: .75rem;
+  padding: .65rem .85rem;
+  background: linear-gradient(180deg, rgba(124,58,237,.10), rgba(124,58,237,.05));
+  border-bottom: 1px solid rgba(124,58,237,.22);
+}
+
+/* Bloque izquierdo: evita que “salte” por falta de espacio visual */
+.dt-header-violet .left{
+  min-width: 0;               /* permite elipsis si fuera necesario */
+}
+.dt-header-violet .title,
+.dt-header-violet .subtitle{
+  white-space: nowrap;        /* no se parte; mantiene 1 línea cada uno */
+  overflow: hidden;
+  text-overflow: ellipsis;    /* si el viewport es muy chico, pon elipsis */
+}
+
+/* Bloque derecho: se queda a la derecha sin empujar al izquierdo */
+.dt-header-violet .right{
+  justify-self: end;          /* se alinea al borde derecho */
+  display: flex; align-items: center; gap: 94.9rem;
+  flex-wrap: nowrap;          /* “Mostrando…” + botones en una sola línea */
+}
+
+/* (si usas el botón suelto de “Volver al login” fuera del contenedor de filtros) */
+.dt-login-wrap{ margin-right: var(--login-offset-right, 0px); } /* lo mueves a gusto */
+/* === Header de la DataTable (responsive) === */
+.dt-header-violet{
+  display:grid !important;
+  grid-template-columns: minmax(0,1fr) auto; /* izquierda flexible | derecha ajustada */
+  align-items:center;
+  column-gap:.75rem;
+  row-gap:.5rem;                 /* permite romper a 2 filas si hace falta */
+  padding:.65rem .85rem;
+  background:linear-gradient(180deg, rgba(124,58,237,.10), rgba(124,58,237,.05));
+  border-bottom:1px solid rgba(124,58,237,.22);
+}
+
+/* izquierda nunca empuja ni se desborda */
+.dt-header-violet .left{
+  min-width:0;
+}
+.dt-header-violet .title,
+.dt-header-violet .subtitle{
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+
+/* derecha: dos bloques en línea (contador+Filtros | Volver) */
+.dt-header-violet .right{
+  justify-self:end;
+  display:flex; align-items:center; gap:.5rem;
+  flex-wrap:wrap;                 /* si no cabe, baja a otra línea */
+}
+
+/* bloque de acciones (contador + Filtros) */
+.dt-actions{
+  display:flex; align-items:center; gap:.5rem;
+}
+
+/* que el botón de “Volver al login” se pegue a la derecha */
+.dt-login-wrap{ margin-left:auto; }
+
+/* ——— cortes responsive ——— */
+@media (max-width: 900px){
+  /* oculta el texto largo del contador para ahorrar espacio */
+  .dt-actions small{ display:none; }
+}
+
+@media (max-width: 640px){
+  /* header en 2 filas: L arriba, R abajo ocupando todo el ancho */
+  .dt-header-violet{
+    grid-template-columns: 1fr;
+  }
+  .dt-header-violet .right{
+    justify-content:space-between; /* Filtros a la izq, Volver a la der */
+  }
+}
+
+/* (opcional) botones compactos en móvil */
+@media (max-width: 420px){
+  .dt-header-violet .p-button{ padding:.45rem .6rem; }
+  .dt-header-violet .p-button .p-button-label{ display:none; } /* solo iconos */
 }

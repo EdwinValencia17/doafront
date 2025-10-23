@@ -1,0 +1,209 @@
+/* ===== Tokens DOA Glass Purple ===== */
+:root{
+  --cc-purple: #6E33F5;            /* morado principal (igual botones) */
+  --cc-purple-600:#5B27E7;
+  --cc-ink: #1b102e;
+  --cc-aside-w: 320px;             /* << más delgado */
+  --cc-radius: 14px;
+  --cc-field-gap: 16px;            /* separación entre inputs */
+  --cc-actions-gap: 14px;          /* separación entre botones */
+  --cc-glass-bg: rgba(110, 51, 245, 0.10);
+  --cc-glass-brd: rgba(110, 51, 245, 0.35);
+  --cc-glass-blur: 12px;
+}
+
+/* ===== Aside ===== */
+.cc-aside{
+  width: var(--cc-aside-w);
+  min-width: var(--cc-aside-w);
+  padding: 18px 16px 22px;
+  border-right: 1px solid var(--cc-glass-brd);
+}
+.cc-aside--glass{
+  background:
+   linear-gradient(180deg, rgba(110,51,245,0.12) 0%, rgba(110,51,245,0.06) 40%, rgba(110,51,245,0.04) 100%);
+  backdrop-filter: blur(var(--cc-glass-blur)) saturate(120%);
+}
+
+.cc-aside-head{
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 18px;
+}
+.cc-aside-head h2{
+  margin: 0; font-size: 1.05rem; color: var(--cc-ink);
+}
+.cc-aside-head .muted{
+  color: rgba(27,16,46,.7); font-size: .8rem; margin-top: 2px;
+}
+
+/* Logo más grande si existe */
+.cc-logo{
+  height: 40px; /* << sube el tamaño a gusto */
+  filter: drop-shadow(0 2px 6px rgba(110,51,245,.25));
+}
+
+/* ===== Blocks & spacing ===== */
+.filter-block + .filter-block{ margin-top: var(--cc-field-gap); }
+.filter-label{
+  font-size:.8rem; color: rgba(27,16,46,.75); margin-bottom: 6px;
+}
+
+/* ===== Glass field (InputText / Dropdown / Calendar) ===== */
+.cc-field{
+  /* aplica sobre .p-inputtext, .p-dropdown, .p-calendar contenedores */
+  border-radius: var(--cc-radius) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.55)) !important;
+  border: 1px solid var(--cc-glass-brd) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.35),
+    0 6px 16px rgba(110,51,245,.08);
+  backdrop-filter: blur(10px);
+}
+
+/* PrimeReact: textos dentro de dropdown/input */
+.cc-field.p-inputtext,
+.cc-field .p-inputtext,
+.cc-field .p-dropdown-label{
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Focus morado elegante */
+.cc-field.p-inputtext:focus,
+.cc-field .p-inputtext:focus,
+.cc-field.p-dropdown.p-focus,
+.cc-field .p-dropdown:not(.p-disabled).p-focus > .p-dropdown-label{
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(110,51,245,.18) !important;
+  border-color: var(--cc-purple) !important;
+}
+
+/* ===== Calendar: icono morado ===== */
+/* Para Calendar con showIcon: diferentes versiones de PrimeReact */
+.cc-calendar .p-inputtext ~ .p-datepicker-trigger .pi,
+.cc-calendar .p-inputtext ~ .p-inputsuffix .pi,
+.cc-calendar .p-inputtext ~ .p-inputicon-right .pi,
+.cc-calendar .p-inputtext ~ button .pi,
+.cc-calendar .pi-calendar{
+  color: var(--cc-purple) !important;
+}
+
+/* Botón trigger del Calendar con glass */
+.cc-calendar .p-datepicker-trigger,
+.cc-calendar .p-button.p-datepicker-trigger{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* ===== Botones: separación y tono ===== */
+.cc-aside-actions{
+  margin-top: calc(var(--cc-field-gap) + 6px);
+  display: flex; flex-direction: column;
+}
+.cc-aside-actions .cc-action + .cc-action{
+  margin-top: var(--cc-actions-gap);
+}
+.cc-aside .p-button.p-button-secondary{
+  background: linear-gradient(90deg,var(--cc-purple),var(--cc-purple-600)) !important;
+  border: 0 !important; color: #fff !important;
+  border-radius: var(--cc-radius) !important;
+  box-shadow: 0 10px 20px rgba(110,51,245,.20);
+}
+.cc-aside .p-button .pi{ color:#fff !important; }
+
+
+/* Contenedor con tamaño fijo para que el layout NO cambie */
+.cc-logo-box{
+  width: 128px;      /* espacio de contención, no empuja al texto */
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible; /* el logo puede “salirse” sin mover nada */
+}
+
+/* capa visual que podemos desplazar sin afectar layout */
+.cc-logo-visual{
+  position: relative;
+  left: var(--logo-shift, -57px);  /* mueve el logo; ej: -8px, -10px */
+}
+
+/* Solo crece visualmente */
+.cc-logo-grow{
+  display: block;
+  height: 100%;
+  transform: scale(var(--logo-scale, 4.9));
+  transform-origin: left center;
+}/* El content del Sidebar se vuelve columna a toda altura */
+.cc-aside-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 10px;                /* ya no en el children inline */
+}
+
+/* Contenedor del aside */
+.cc-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+}
+
+/* Head fijo arriba */
+.cc-aside-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px 0 4px;
+}
+
+/* Body: aquí va el scroll */
+.cc-aside-body {
+  flex: 1 1 auto;
+  overflow: auto;
+  padding: 8px 4px 12px 4px;
+  margin-right: 2px;            /* para que no tape el scrollbar */
+}
+
+/* Footer fijo abajo con glass y safe-area */
+.cc-aside-footer {
+  position: sticky;             /* se pega al fondo del viewport del panel */
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(235,228,255,.70) 0%, rgba(235,228,255,.95) 60%, rgba(235,228,255,1) 100%);
+  backdrop-filter: blur(6px) saturate(130%);
+  -webkit-backdrop-filter: blur(6px) saturate(130%);
+  border-top: 1px solid rgba(107,70,255,.25);
+  padding: 10px 4px calc(10px + env(safe-area-inset-bottom));
+  display: grid;
+  gap: 10px;
+  z-index: 2;
+}
+
+/* Bloques de filtro */
+.filter-block { margin-bottom: 12px; }
+.filter-label { font-size: .85rem; font-weight: 700; color: #0f0f0f; margin: 6px 4px; }
+
+/* Botones */
+.cc-action { height: 44px; font-weight: 800; letter-spacing: .3px; }
+.cc-action--ghost { background: #fff; color: #6b46ff; border: 2px solid #6b46ff; }
+.cc-action--ghost:hover { background: rgba(107,70,255,.06); }
+
+
+.cc-clearable { position: relative; }
+.cc-clear-btn {
+  position: absolute;
+  right: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  opacity: .65;
+  width: 1.5rem; height: 1.5rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: .5rem;
+}
+.cc-clear-btn:hover { opacity: 1; box-shadow: 0 0 0 2px color-mix(in oklab, var(--violet, #9a6bff), transparent 70%); }
+.pr-9 { padding-right: 2.25rem !important; }

@@ -1,0 +1,30 @@
+:root{
+  --chip-radius:10px; --chip-fw:800; --chip-px:.55rem; --chip-py:.15rem; --chip-fs:.72rem; --chip-br:1.5px;
+
+  /* tonos suaves (según lo que pediste) */
+  --chip-purple-bg:#efe9ff; --chip-purple-bd:#8b6cff; --chip-purple-tx:#5a3fd1;  /* morado suave */
+  --chip-red-bg:#ffe8ea;    --chip-red-bd:#ff6b6b;     --chip-red-tx:#b91c1c;    /* rojo suave */
+  --chip-orange-bg:#fff0e6; --chip-orange-bd:#ff944d;  --chip-orange-tx:#b45309; /* naranja suave */
+  --chip-green-bg:#e8f6ee;  --chip-green-bd:#41b883;   --chip-green-tx:#166534;  /* verde suave */
+  --chip-blue-bg:#e7f1ff;   --chip-blue-bd:#6aa8ff;    --chip-blue-tx:#1e40af;   /* azul suave */
+  --chip-amber-bg:#fff8e6;  --chip-amber-bd:#f5b942;   --chip-amber-tx:#92400e;  /* amarillo/naranja suave */
+  --chip-gray-bg:#eff1f5;   --chip-gray-bd:#b8c0cc;    --chip-gray-tx:#475569;   /* neutro */
+}
+
+.chip{
+  display:inline-block;
+  font-size:var(--chip-fs);
+  font-weight:var(--chip-fw);
+  padding:var(--chip-py) var(--chip-px);
+  border-radius:var(--chip-radius);
+  border:var(--chip-br) solid transparent;
+  line-height:1.25;
+}
+
+.chip--purple{ background:var(--chip-purple-bg); color:var(--chip-purple-tx); border-color:var(--chip-purple-bd) }
+.chip--red   { background:var(--chip-red-bg);    color:var(--chip-red-tx);    border-color:var(--chip-red-bd) }
+.chip--orange{ background:var(--chip-orange-bg); color:var(--chip-orange-tx); border-color:var(--chip-orange-bd) }
+.chip--green { background:var(--chip-green-bg);  color:var(--chip-green-tx);  border-color:var(--chip-green-bd) }
+.chip--blue  { background:var(--chip-blue-bg);   color:var(--chip-blue-tx);   border-color:var(--chip-blue-bd) }
+.chip--amber { background:var(--chip-amber-bg);  color:var(--chip-amber-tx);  border-color:var(--chip-amber-bd) }
+.chip--gray  { background:var(--chip-gray-bg);   color:var(--chip-gray-tx);   border-color:var(--chip-gray-bd) }

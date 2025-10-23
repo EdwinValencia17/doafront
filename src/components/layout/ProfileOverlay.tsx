@@ -13,7 +13,7 @@ export const ProfileOverlay = forwardRef<OverlayPanel, Record<string, never>>(
     const nav = useNavigate();
 
     return (
-      <OverlayPanel ref={ref} showCloseIcon dismissable>
+      <OverlayPanel ref={ref}>
         <div style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 180 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Avatar label={avatarLabel} shape="circle" />

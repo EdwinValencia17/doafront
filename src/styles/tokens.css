@@ -1,0 +1,18 @@
+:root{
+  /* base */
+  --tag-radius: 10px;
+  --tag-fw: 800;
+  --tag-ls: .02em;
+  --tag-px-sm: .5rem; --tag-py-sm: .18rem;
+  --tag-px-md: .65rem; --tag-py-md: .28rem;
+  --tag-fz-sm: .72rem; --tag-fz-md: .78rem;
+
+  /* tonos suaves */
+  --soft-violet-bg: #efe9ff;  --soft-violet-bd: #c7b7ff; --soft-violet-fg: #5a37c9; /* morado suave */
+  --soft-red-bg:    #ffe8ea;  --soft-red-bd: #ffb7be;  --soft-red-fg:    #b52a3a; /* rojo suave   */
+  --soft-orange-bg: #fff0e4;  --soft-orange-bd:#ffd0ad; --soft-orange-fg: #c25a12; /* naranja suave*/
+  --soft-blue-bg:   #eaf4ff;  --soft-blue-bd: #bcdcff;  --soft-blue-fg:   #2d69c9; /* azul suave   */
+  --soft-mint-bg:   #e6fbf6;  --soft-mint-bd: #b9f3e6;  --soft-mint-fg:   #0d7f73; /* verde/menta  */
+  --soft-yellow-bg: #fff9e2;  --soft-yellow-bd:#ffe9a6; --soft-yellow-fg: #7d5b00; /* amarillo suave*/
+  --soft-gray-bg:   #f1f3f7;  --soft-gray-bd: #d9dee8;  --soft-gray-fg:   #5a6478; /* neutro       */
+}

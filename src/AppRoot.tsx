@@ -4,15 +4,19 @@ import router from "./routes/router";
 import { useAuthBootstrap } from "@/hooks/auth/useAuthBootstrap";
 import { ToastProvider } from "@/ui/ToastProvider";
 
-export default function AppRoot(): JSX.Element | null {
+import { LoaderProvider } from "@/ui/LoaderProvider"; // 👈 importa el provider
+
+export default function AppRoot() {
   const { hydrated } = useAuthBootstrap();
   if (!hydrated) return null;
 
   return (
     <Suspense fallback={<div className="p-6 text-center">Cargando...</div>}>
-      <ToastProvider>
-        <RouterProvider router={router} />
-      </ToastProvider>
+      <LoaderProvider> {/* 👈 ahora todo lo de abajo tiene contexto */}
+        <ToastProvider>
+          <RouterProvider router={router} />
+        </ToastProvider>
+      </LoaderProvider>
     </Suspense>
   );
 }

@@ -3,6 +3,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useLogin } from "@/hooks/auth/useLogin";
 import LoginFormPlain from "./LoginForm";
+import logo from "@/assets/787eaa1c-4ac6-4648-9c86-3b4a7d6f45db-removebg-preview.png";
 
 export default function LoginPage() {
   const nav = useNavigate();
@@ -20,10 +21,11 @@ export default function LoginPage() {
       <section className="login-card">
         {/* Lado izquierdo (hero) */}
         <aside className="login-hero">
-          <div className="logo-mask" aria-label="Clarios DOA" />
+         <img src={logo} alt="Logo" className="logo-mask" />
           <h1 className="hero-title shine-text">¡Hola, bienvenido!</h1>
           <p className="hero-copy shine-text soft">
-            Accede a DOA para gestionar y consultar tus órdenes con un flujo simple y seguro.
+            Accede a DOA para gestionar y consultar tus órdenes con un flujo
+            simple y seguro.
           </p>
 
           {/* Aquí va lo que antes era REGISTER → CONSULTAR ÓRDENES */}

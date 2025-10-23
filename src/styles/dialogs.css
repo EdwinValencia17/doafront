@@ -1,0 +1,203 @@
+/* ================================
+   GLASS THEME (DOA)
+   ================================ */
+:root{
+  --glass-violet: 235, 228, 255;         /* #ebe4ff */
+  --glass-brand: 107, 70, 255;           /* #6b46ff */
+  --glass-bg: rgba(var(--glass-violet), .55);
+  --glass-border: rgba(var(--glass-brand), .25);
+  --glass-shadow: 0 12px 36px rgba(31,17,71,.14);
+  --glass-overlay: rgba(55,25,145,.35);  /* overlay del mask */
+}
+
+/* === OVERLAY (fondo borroso + tinte violeta) === */
+.glass-mask {
+  background: var(--glass-overlay) !important;
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+}
+
+/* === DIALOG en glass === */
+.rg-dialog.p-dialog {
+  background: transparent;
+  box-shadow: none;
+}
+
+.rg-dialog .p-dialog-header,
+.rg-dialog .p-dialog-content {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px) saturate(130%);
+  -webkit-backdrop-filter: blur(12px) saturate(130%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.rg-dialog .p-dialog {
+  border-radius: 18px;
+}
+.rg-dialog .p-dialog-header {
+  border-radius: 18px 18px 0 0;
+  border-bottom: 1px solid rgba(var(--glass-violet), .6);
+}
+.rg-dialog .p-dialog-content {
+  border-radius: 0 0 18px 18px;
+}
+
+/* Título negro (como BANDEJA DEL SOLICITANTE) */
+.rg-dialog .p-dialog-title {
+  color: #181818;
+  font-weight: 800;
+  letter-spacing: .4px;
+}
+
+/* ===== Fieldset legend violeta con texto negro ===== */
+.rg-dialog .p-fieldset {
+  border-color: rgba(var(--glass-violet), .8);
+  border-radius: 14px;
+  background: transparent;
+}
+.rg-dialog .p-fieldset .p-fieldset-legend {
+  background: rgba(var(--glass-violet), .9);
+  border: 1px solid rgba(var(--glass-violet), 1);
+  color: #181818;                 /* letras negras */
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 6px 14px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+}
+.rg-dialog .p-fieldset .p-fieldset-legend .p-fieldset-legend-text { color: inherit; }
+.rg-dialog .p-fieldset .p-fieldset-content { border-top: 1px solid rgba(var(--glass-violet), .8); }
+
+/* ===== Grids y texto safe (evita solapes) ===== */
+.modal-grid-2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px 16px; }
+.modal-grid-3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px 16px; }
+.modal-section-gap { margin-bottom: 16px; }
+.info { min-width:0; }
+.info .info-label { color:#6d6d6d; font-size:.82rem; }
+.info .info-value { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+/* ===== Animación de entrada ===== */
+@keyframes dialogIn {
+  from { transform: translateY(10px) scale(.98); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+.rg-dialog .p-dialog-header,
+.rg-dialog .p-dialog-content { animation: dialogIn .18s ease-out; }
+
+/* ===== Fallback si el navegador no soporta backdrop-filter ===== */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .glass-mask { background: rgba(55,25,145,.55) !important; }
+  .rg-dialog .p-dialog-header,
+  .rg-dialog .p-dialog-content {
+    background: rgba(var(--glass-violet), 1);
+  }
+}
+/* ===== Ajustes fuertes de bordes dentro del dialog ===== */
+
+/* 1) Tarjetas/Fieldset: borde negro marcado */
+.rg-dialog .cc-card.p-fieldset {
+  border: 1.5px solid #121212;             /* negro sólido */
+  border-radius: 14px;
+  background: transparent;                  /* seguimos en glass */
+}
+
+/* 2) Legend (título de cada card): morado más intenso y con presencia */
+.rg-dialog .p-fieldset .p-fieldset-legend {
+  background: #ece5ff;                      /* pastel coherente */
+  border: 2px solid #6b46ff;                /* morado fuerte */
+  color: #0f0f0f;                           /* texto negro */
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 7px 14px;
+  line-height: 1;
+  letter-spacing: .2px;
+  box-shadow:
+    0 0 0 2px rgba(107, 70, 255, .12),      /* anillo sutil */
+    0 2px 8px rgba(31,17,71,.10);           /* leve profundidad */
+}
+
+/* Asegura herencia de color del texto interno del legend */
+.rg-dialog .p-fieldset .p-fieldset-legend .p-fieldset-legend-text {
+  color: inherit;
+}
+
+/* 3) Divider interno más visible (línea horizontal) */
+.rg-dialog .p-divider-horizontal:before {
+  border-top-color: #121212 !important;     /* misma línea negra */
+  opacity: .25;                             /* sutil para no gritar */
+}
+
+/* 4) Hover/Focus del legend (opcional) */
+.rg-dialog .p-fieldset .p-fieldset-legend:hover {
+  background: #e6deff;
+  border-color: #724dff;
+  box-shadow:
+    0 0 0 2px rgba(107, 70, 255, .18),
+    0 3px 10px rgba(31,17,71,.12);
+  transition: .15s ease-in-out;
+}
+
+/* 5) Si algún fieldset de Prime mete borde claro adicional, lo anulamos */
+.rg-dialog .p-fieldset .p-fieldset-content {
+  border-top: 1px solid rgba(18,18,18,.18);
+}
+
+/* ===== Brand tokens (ajusta si usas otro tono exacto) ===== */
+:root{
+  --brand-vi: #6b46ff;              /* morado fuerte del borde */
+  --brand-vi-100: #eee9ff;          /* pastel de fondo */
+}
+
+/* === Bordes morados en TODAS las tarjetas del modal === */
+.rg-dialog .cc-card.p-fieldset {
+  border: 2px solid var(--brand-vi) !important;
+  border-radius: 14px;
+}
+
+/* === Legend (título de cada sección) con borde morado marcado === */
+.rg-dialog .p-fieldset .p-fieldset-legend {
+  background: var(--brand-vi-100);
+  border: 2px solid var(--brand-vi) !important;
+  color: #0f0f0f;                 /* texto negro */
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 7px 14px;
+  line-height: 1;
+  letter-spacing: .2px;
+}
+
+/* Por si Prime envuelve el texto del legend */
+.rg-dialog .p-fieldset .p-fieldset-legend .p-fieldset-legend-text {
+  color: inherit;
+}
+
+/* === Labels negros y con más presencia === */
+.rg-dialog .info .info-label {
+  color: #0f0f0f !important;      /* negro */
+  font-weight: 700;               /* que domine sobre el valor */
+  letter-spacing: .2px;
+}
+
+/* Valores un tono menos para jerarquía visual */
+.rg-dialog .info .info-value {
+  color: #2b2b2b;
+  font-weight: 500;
+}
+
+/* Opcional: divider más fino y acorde al borde morado */
+.rg-dialog .p-divider-horizontal:before {
+  border-top-color: var(--brand-vi) !important;
+  opacity: .25;
+}
+
+/* Botones “outlined” dentro del modal con el mismo morado del borde (por si los usas) */
+.rg-dialog .p-button.p-button-outlined {
+  border-color: var(--brand-vi);
+  color: var(--brand-vi);
+}
+.rg-dialog .p-button.p-button-outlined:enabled:hover {
+  background: rgba(107,70,255,.06);
+}

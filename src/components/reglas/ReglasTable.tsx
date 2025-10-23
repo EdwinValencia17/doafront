@@ -1,6 +1,7 @@
 // src/components/reglas/ReglasTable.tsx
 import React, { useMemo } from 'react';
-import { DataTable, DataTablePageEvent } from 'primereact/datatable';
+import { DataTable } from 'primereact/datatable';
+import type { DataTablePageEvent } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Tag } from 'primereact/tag';
 import { Button } from 'primereact/button';
@@ -8,13 +9,9 @@ import type { Regla } from '@/services/reglasdn/types';
 import { fmtMoney, toNum, prettyMaxCell } from '@/features/reglasdn/domain/format';
 import { apByBase, lastNivel } from '@/features/reglasdn/domain/filters';
 
-// ——— Breakpoints mínimos para ocultar columnas en XS/SM ———
 function useMedia() {
   const mq = (q: string) => typeof window !== 'undefined' && window.matchMedia(q).matches;
-  return {
-    sm: mq('(max-width: 900px)'),
-    md: mq('(max-width: 1200px)'),
-  };
+  return { sm: mq('(max-width: 900px)'), md: mq('(max-width: 1200px)') };
 }
 
 export type PageState = { page: number; rows: number; total: number };
@@ -26,14 +23,11 @@ export function ReglasTable(props: {
   allowMutations: boolean;
   headerLeft?: React.ReactNode; headerRight?: React.ReactNode;
 }) {
-  const {
-    rows, loading, page, onPage, onEdit, onDelete, allowMutations,
-    headerLeft, headerRight
-  } = props;
+  const { rows, loading, page, onPage, onEdit, onDelete, allowMutations, headerLeft, headerRight } = props;
 
-  const { sm, md } = useMedia();               // ← breakpoints
-  const showGerente  = !md;                    // oculta GERENTE OPS en ≤1200
-  const showFinanzas = !sm;                    // oculta FINANZAS en ≤900
+  const { sm, md } = useMedia();
+  const showGerente  = !md;
+  const showFinanzas = !sm;
 
   const categoriaCell = (r: Regla) => (r.categoria || '').toUpperCase();
   const ccNivelCell   = (r: Regla) => r.ccNivel || (r.centroCosto ? `${r.centroCosto} / ${lastNivel(r)}` : '');
@@ -65,11 +59,13 @@ export function ReglasTable(props: {
         responsiveLayout="scroll"
         scrollable
         scrollHeight="calc(100vh - 280px)"
-        /** clave: ancho mínimo total para evitar squeeze */
         tableStyle={{ minWidth: 1200 }}
         className="doa-table table--violet table--responsive"
         loading={loading}
         header={TableHeader}
+
+        /* 🔑 servidor: usa totalRecords y no el largo del value */
+        lazy
         paginator
         paginatorTemplate="RowsPerPageDropdown PrevPageLink PageLinks NextPageLink"
         rows={page.rows}

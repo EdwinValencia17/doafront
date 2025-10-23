@@ -1,7 +1,7 @@
 // src/components/reglas/CentroSelectorDrawer.tsx
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { CentroDTO } from "@/services/reglasdn/types";
 
 export function CentroSelectorDrawer({
@@ -24,24 +24,44 @@ export function CentroSelectorDrawer({
   const [q, setQ] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
   const [scrolling, setScrolling] = useState(false);
-  const scrollTimer = useRef<number | undefined>(undefined);
+  const scrollTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  // 👇 espejo local para evitar parpadeo cuando "centros" se vacía temporalmente
+  const [centrosView, setCentrosView] = useState<CentroDTO[]>(centros);
+
+  useEffect(() => {
+    if (Array.isArray(centros) && centros.length > 0) {
+      setCentrosView(centros);
+    }
+    // si llega [], NO vaciamos la vista -> evita que "se quiten"
+  }, [centros]);
+
+  // si quieres forzar "Todos los centros" apenas entra el componente:
+  // useEffect(() => { setSelCentro(null); }, [setSelCentro]);
 
   const filtrados = useMemo(() => {
     const t = q.trim().toLowerCase();
-    if (!t) return centros;
-    return centros.filter(
+    const source = centrosView; // usamos la vista estable
+    if (!t) return source;
+    return source.filter(
       (c) =>
         c.centroCosto.toLowerCase().includes(t) ||
         (c.compania || "").toLowerCase().includes(t)
     );
-  }, [q, centros]);
+  }, [q, centrosView]);
 
   const handleScroll = () => {
     setScrolling(true);
-    if (scrollTimer.current) window.clearTimeout(scrollTimer.current);
+    if (scrollTimer.current) clearTimeout(scrollTimer.current);
     // quita el “highlight scroll” 180 ms después de parar
-    scrollTimer.current = window.setTimeout(() => setScrolling(false), 180);
+    scrollTimer.current = setTimeout(() => setScrolling(false), 180);
   };
+
+  useEffect(() => {
+    return () => {
+      if (scrollTimer.current) clearTimeout(scrollTimer.current);
+    };
+  }, []);
 
   return (
     <div className="centros-drawer">
@@ -77,7 +97,7 @@ export function CentroSelectorDrawer({
 
         {filtrados.map((c) => (
           <Button
-            key={`${c.centroCosto}|${c.compania}`}
+            key={`${c.centroCosto}|${c.compania ?? ""}`}
             label={`${c.centroCosto}${c.compania ? " — " + c.compania : ""}`}
             className={`cc-btn cc-btn--xl p-button-outlined w-full ${
               selCentro?.centroCosto === c.centroCosto ? "is-active" : ""

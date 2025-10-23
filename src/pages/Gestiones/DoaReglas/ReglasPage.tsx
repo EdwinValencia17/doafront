@@ -1,3 +1,4 @@
+// src/pages/Doa/ReglasPage.tsx
 import { useState } from "react";
 import { Button } from "primereact/button";
 import { Sidebar } from "primereact/sidebar";
@@ -9,6 +10,15 @@ import ModalReglasEditor from "@/Modales/ReglasEditor/ModalReglasEditor";
 export default function ReglasPage() {
   const vm = useReglasPageVM();
   const [drawerVisible, setDrawerVisible] = useState(false);
+
+  // 👇 handler: si no hay centro, primero pedimos elegirlo
+  const handleNewRule = () => {
+    if (!vm.selCentro) {
+      setDrawerVisible(true);
+      return;
+    }
+    vm.openNew();
+  };
 
   const headerLeft = (
     <>
@@ -26,12 +36,11 @@ export default function ReglasPage() {
         onClick={() => setDrawerVisible(true)}
       />
       <Button
-        icon="pi pi-plus"
-        label="Nueva regla"
-        className="p-button-sm p-button-outlined"
-        onClick={vm.openNew}
-        disabled={!vm.selCentro || vm.heavyLoading || !vm.allowMutations}
-      />
+  icon="pi pi-plus"
+  label="Nueva regla"
+  className="p-button-sm p-button-outlined"
+  onClick={vm.openNew}          // ✅ siempre modal
+/>
     </div>
   );
 
@@ -64,21 +73,6 @@ export default function ReglasPage() {
         value={vm.editing}
         onSave={vm.onSaveEditor}
       />
-
-      {vm.heavyLoading && (
-        <div style={{
-          position: "fixed", inset: 0, background: "rgba(0,0,0,.25)",
-          display: "grid", placeItems: "center", zIndex: 1000
-        }}>
-          <div style={{
-            background: "var(--surface-card)", padding: "1rem 1.25rem",
-            borderRadius: 12, boxShadow: "0 10px 30px rgba(0,0,0,.2)", textAlign: "center"
-          }}>
-            <i className="pi pi-spin pi-spinner" style={{ fontSize: 24, display: "block", marginBottom: 8 }} />
-            <div>Procesando… No cierres esta ventana</div>
-          </div>
-        </div>
-      )}
     </>
   );
 }
